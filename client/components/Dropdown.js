@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useRouter } from "next/router";
-import {NavLink, LinkTitle} from './styles/NavStyles';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { NavLink, LinkTitle } from './styles/NavStyles';
 import useClickOutside from './useClickOutside';
-import {DropdownStyles, DropdownListWrapper} from './styles/DropdownStyles';
+import { DropdownStyles, DropdownListWrapper } from './styles/DropdownStyles';
 
 const Dropdown = ({ title, items }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  
+
   const toggleOpen = () => setOpen(!open);
 
   const onItemClick = (item) => {
-    if(item.pathname) {
-        router.push(item.pathname);
+    if (item.pathname) {
+      router.push(item.pathname);
     } else {
       item.action();
     }
     setOpen(false);
-  }
+  };
 
   const dropdownRef = useClickOutside(toggleOpen);
 
@@ -30,16 +30,14 @@ const Dropdown = ({ title, items }) => {
         </NavLink>
         {open && (
           <DropdownListWrapper ref={dropdownRef}>
-              <ul>
-                {items.map((item) => {
-                  return (
-                    <li onClick={() => onItemClick(item)}>
-                      {item.title}
-                      <Icon icon={item.icon}/>
-                    </li>
-                  );
-                })}
-              </ul>
+            <ul>
+              {items.map((item) => (
+                <li onClick={() => onItemClick(item)}>
+                  {item.title}
+                  <Icon icon={item.icon} />
+                </li>
+              ))}
+            </ul>
           </DropdownListWrapper>
         )}
       </div>
@@ -47,9 +45,7 @@ const Dropdown = ({ title, items }) => {
   );
 };
 
-
-const Icon = ({icon}) => {
-
+const Icon = ({ icon }) => {
   const StyledIcon = styled(icon)`
     width: 18px;
     height: auto;
@@ -62,7 +58,6 @@ const Icon = ({icon}) => {
     }
   `;
 
-  return <StyledIcon />
-
-}
+  return <StyledIcon />;
+};
 export default Dropdown;

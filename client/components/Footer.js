@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Logo from './StoreName';
 import Link from 'next/link';
+import Logo from './StoreName';
 
 const FooterContainer = styled.div`
   border-top: 1px solid ${(props) => props.theme.colors.lightGrey};
@@ -60,79 +60,77 @@ const FooterLinks = styled.div`
   justify-items: center;
 `;
 
-
-
-
 const Footer = () => {
-    const currentYear = new Date().getFullYear()
-   return (
-     <FooterContainer>
-       <FooterLinks>
-         <Links>
-           <h4>About TechMoon</h4>
-           <ul>
-             <li>
-               <Link href="/">
-                 <a>About</a>
-               </Link>
-             </li>
-             <li>
-               <Link href="/">
-                 <a>Privacy Policy</a>
-               </Link>
-             </li>
-             <li>
-               <Link href="/">
-                 <a>Contact</a>
-               </Link>
-             </li>
-           </ul>
-         </Links>
-         <Links>
-           <h4>Client Information</h4>
-           <ul>
-             <li>
-               <Link href="/">
-                 <a>Payment</a>
-               </Link>
-             </li>
-             <li>
-               <Link href="/">
-                 <a>Delivery</a>
-               </Link>
-             </li>
-             <li>
-               <Link href="/">
-                 <a>Returns </a>
-               </Link>
-             </li>
-             <li>
-               <Link href="/">
-                 <a>Warranty </a>
-               </Link>
-             </li>
-           </ul>
-         </Links>
-         <Links>
-           <h4>My Account</h4>
-           <ul>
-             <li>
-               <Link href="/">
-                 <a>Shopping Cart</a>
-               </Link>
-             </li>
-            </ul>
-         </Links>
-       </FooterLinks>
-       <LogoSection>
-         <Logo />
-         <CopyrightSection>
-           &copy;{` ${currentYear} TechMoon - All rights Reserved.`}{" "}
-         </CopyrightSection>
-       </LogoSection>
-     </FooterContainer>
-   );
-
-}
+  const currentYear = new Date().getFullYear();
+  return (
+    <FooterContainer>
+      <FooterLinks>
+        <Links>
+          <h4>About TechMoon</h4>
+          <ul>
+            <li>
+              <Link href="/">
+                <a>About</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/">
+                <a>Privacy Policy</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/">
+                <a>Contact</a>
+              </Link>
+            </li>
+          </ul>
+        </Links>
+        <Links>
+          <h4>Client Information</h4>
+          <ul>
+            <li>
+              <Link href="/">
+                <a>Payment</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/">
+                <a>Delivery</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/">
+                <a>Returns </a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/">
+                <a>Warranty </a>
+              </Link>
+            </li>
+          </ul>
+        </Links>
+        <Links>
+          <h4>My Account</h4>
+          <ul>
+            <li>
+              <Link href="/">
+                <a>Shopping Cart</a>
+              </Link>
+            </li>
+          </ul>
+        </Links>
+      </FooterLinks>
+      <LogoSection>
+        <Logo />
+        <CopyrightSection>
+          &copy;
+          {` ${currentYear} TechMoon - All rights Reserved.`}
+          {' '}
+        </CopyrightSection>
+      </LogoSection>
+    </FooterContainer>
+  );
+};
 
 export default Footer;

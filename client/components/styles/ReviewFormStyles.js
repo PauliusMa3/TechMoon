@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ReviewFormStyles = styled.form`
-  border: 1px solid ${props => props.theme.colors.lightGrey};
+  border: 1px solid ${(props) => props.theme.colors.lightGrey};
   padding: 1rem;
   margin-bottom: 2rem;
   max-width: 700px;
@@ -24,7 +24,7 @@ export const ReviewFormStyles = styled.form`
   textarea {
     margin-top: 1rem;
     resize: none;
-    border: 1px solid ${props => props.theme.colors.lightGrey};
+    border: 1px solid ${(props) => props.theme.colors.lightGrey};
     font-family: "Robo-regular";
     width: 100%;
     font-size: 1rem;
@@ -38,7 +38,7 @@ export const ReviewFormStyles = styled.form`
 
   button {
     width: 50%;
-    color: ${props => props.theme.colors.white};
+    color: ${(props) => props.theme.colors.white};
     margin-top: 1rem;
 
     cursor: pointer;
@@ -68,7 +68,7 @@ export const ReviewFormStyles = styled.form`
     span {
       margin-top: 1rem;
       font-size: 1rem;
-      color: ${props => props.theme.colors.black};
+      color: ${(props) => props.theme.colors.black};
     }
     * > & {
       flex: 1;
@@ -81,13 +81,13 @@ export const ReviewFormStyles = styled.form`
     label {
       /* color: #ddd; */
 
-      color: ${props => props.theme.colors.lightGrey};
+      color: ${(props) => props.theme.colors.lightGrey};
     }
     input {
       display: none;
       &:checked {
         & ~ label {
-          color: ${props => props.theme.colors.yellow};
+          color: ${(props) => props.theme.colors.yellow};
         }
       }
       & + label {

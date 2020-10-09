@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import styled from 'styled-components';
 
 const ProductDescriptionStyles = styled.div`
@@ -15,15 +15,13 @@ const ProductDescriptionStyles = styled.div`
         font-family: 'Mont-bold';
         font-size: 1.2rem;
     }
-`
+`;
 
-const ProductDescription = ({ data }) => {
-     return (
-       <ProductDescriptionStyles>
-           <h2>Product Description</h2>
-         <p>{data}</p>
-       </ProductDescriptionStyles>
-     );
-};
+const ProductDescription = ({ data }) => (
+  <ProductDescriptionStyles>
+    <h2>Product Description</h2>
+    <p>{data}</p>
+  </ProductDescriptionStyles>
+);
 
 export default ProductDescription;

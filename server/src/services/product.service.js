@@ -1,5 +1,5 @@
-const db = require("../../models");
-const { Op } = require("sequelize");
+const { Op } = require('sequelize');
+const db = require('../../models');
 
 const getProduct = async ({ id }) => {
   const product = await db.product.findByPk(id);
@@ -15,7 +15,9 @@ const getProduct = async ({ id }) => {
   };
 };
 
-const getProducts = async ({ searchTerm, isProductSearch, skip, limit }) => {
+const getProducts = async ({
+  searchTerm, isProductSearch, skip, limit,
+}) => {
   // if(!searchTerm && !isProductSearch) {
   //     // add limit & offset for pagination
   //     const products = await db.product.findAndCountAll({
@@ -47,7 +49,7 @@ const getProducts = async ({ searchTerm, isProductSearch, skip, limit }) => {
           },
         ],
       },
-      attributes: ["id", "name", "image", "price"],
+      attributes: ['id', 'name', 'image', 'price'],
     });
 
     return searchProducts;

@@ -1,17 +1,17 @@
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { createHttpLink } from "apollo-link-http";
-import { ApolloClient } from "apollo-client";
-import fetch from "isomorphic-fetch";
-import withApollo from "next-with-apollo";
-import { ApolloLink } from "apollo-link";
-import { setContext } from "apollo-link-context";
-import gql from "graphql-tag";
-import { SERVER } from "../config";
-import { LOCAL_CART_QUERY } from "../components/Cart";
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createHttpLink } from 'apollo-link-http';
+import { ApolloClient } from 'apollo-client';
+import fetch from 'isomorphic-fetch';
+import withApollo from 'next-with-apollo';
+import { ApolloLink } from 'apollo-link';
+import { setContext } from 'apollo-link-context';
+import gql from 'graphql-tag';
+import { SERVER } from '../config';
+import { LOCAL_CART_QUERY } from '../components/Cart';
 
 const httpLink = createHttpLink({
   uri: SERVER,
-  credentials: "include",
+  credentials: 'include',
   // fetchOptions: {
   //   credentials: "include",
   // },
@@ -53,7 +53,7 @@ const mutations = {
     const { cartOpen } = cache.readQuery({
       query: LOCAL_CART_QUERY,
     });
-    const hasArgProvided = args && typeof args.cartEnabled === "boolean";
+    const hasArgProvided = args && typeof args.cartEnabled === 'boolean';
 
     cache.writeData({
       data: {
@@ -74,16 +74,15 @@ cache.writeData({
 });
 
 export default withApollo(
-  () =>
-    new ApolloClient({
-      link: httpLink,
-      cache,
-      resolvers: {
-        Mutation: mutations,
-      },
-      // defaultOptions: {
-      //   cartOpen: false,
-      // },
-      // credentials: "include",
-    })
+  () => new ApolloClient({
+    link: httpLink,
+    cache,
+    resolvers: {
+      Mutation: mutations,
+    },
+    // defaultOptions: {
+    //   cartOpen: false,
+    // },
+    // credentials: "include",
+  }),
 );

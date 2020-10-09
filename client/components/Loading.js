@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import styled from 'styled-components';
 
 const Loading = styled('svg')`
     max-width: 7rem;
     height: 100%;
-    fill: ${props => props.theme.colors.secondaryBlue};
+    fill: ${(props) => props.theme.colors.secondaryBlue};
     margin: auto;
-`
+`;
 
 export default () => (
   <Loading

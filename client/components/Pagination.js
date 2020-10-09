@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 import Link from 'next/link';
 import gql from 'graphql-tag';
-import {useQuery} from "@apollo/react-hooks";
-import {perPage} from '../config';
+import { useQuery } from '@apollo/react-hooks';
 import slug from 'slug';
+import { perPage } from '../config';
 
 const PRODUCTS_AGGREGATE_QUERY = gql`
   query PRODUCTS_AGGREGATE_QUERY {
@@ -25,9 +25,10 @@ const PaginationStyles = styled.div`
   }
 `;
 
-const Pagination = ({ page, totalItems, categoryId, categoryName }) => {
+const Pagination = ({
+  page, totalItems, categoryId, categoryName,
+}) => {
   const { data, loading } = useQuery(PRODUCTS_AGGREGATE_QUERY);
-
 
   if (loading) return <p>Loading...</p>;
 
@@ -39,7 +40,13 @@ const Pagination = ({ page, totalItems, categoryId, categoryName }) => {
         <a disabled={page === 1}>Previous</a>
       </Link>
       <p>
-        Page {page} of {totalPages}
+        Page
+        {' '}
+        {page}
+        {' '}
+        of
+        {' '}
+        {totalPages}
       </p>
       <Link
         href={`/c/${slug(categoryName)}/${categoryId}?page=${page + 1}`}

@@ -1,6 +1,6 @@
-import React from "react";
-import SignupForm from "../components/SignupForm";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import SignupForm from '../components/SignupForm';
 
 const SingUpPageStyles = styled.div`
   display: flex;
@@ -8,12 +8,10 @@ const SingUpPageStyles = styled.div`
   align-items: center;
 `;
 
-const SignUpPage = () => {
-  return (
-    <SingUpPageStyles>
-      <SignupForm />
-    </SingUpPageStyles>
-  );
-};
+const SignUpPage = () => (
+  <SingUpPageStyles>
+    <SignupForm />
+  </SingUpPageStyles>
+);
 
 export default SignUpPage;

@@ -13,10 +13,9 @@ function AuthProvider({ children }) {
     user: null,
   });
 
-  const getUser = () =>
-    axios.get('http://localhost:8888/auth/userDetails', {
-      withCredentials: true,
-    });
+  const getUser = () => axios.get('http://localhost:8888/auth/userDetails', {
+    withCredentials: true,
+  });
 
   useEffect(() => {
     getUser()
@@ -39,7 +38,7 @@ function AuthProvider({ children }) {
         { email, password },
         {
           withCredentials: true,
-        }
+        },
       )
       .catch((e) => {
         if (e.response.status === 401) {

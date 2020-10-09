@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { FaStore, FaTruck } from 'react-icons/fa';
 import { useAuth } from '../src/auth-context';
 import formatMoney from '../utils/formatMoney';
 import { useForm, FormContainer } from '../src/form-context';
-
-import { FaStore, FaTruck } from 'react-icons/fa';
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -139,9 +138,7 @@ const Checkbox = styled.div`
   }
 `;
 
-const StyledIcon = styled(({ component, ...props }) =>
-  React.cloneElement(component, props)
-)`
+const StyledIcon = styled(({ component, ...props }) => React.cloneElement(component, props))`
   height: 44px;
   width: 44px;
   margin-right: 1rem;
@@ -242,7 +239,7 @@ const CheckoutUserDetails = ({
             />
           </label>
         </FieldSet>
-        <hr></hr>
+        <hr />
         <FieldSet>
           <Checkbox>
             <input
@@ -274,7 +271,7 @@ const CheckoutUserDetails = ({
             </label>
           </Checkbox>
         </FieldSet>
-        <hr></hr>
+        <hr />
         <button type="submit">Next</button>
       </Form>
     </Container>

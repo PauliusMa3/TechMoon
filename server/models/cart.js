@@ -1,7 +1,6 @@
-"use strict";
 module.exports = (sequelize, DataTypes) => {
   const Cart = sequelize.define(
-    "cart",
+    'cart',
     {
       id: {
         type: DataTypes.STRING,
@@ -10,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       user_id: {
         type: DataTypes.STRING,
         references: {
-          model: "user",
-          key: "user_id",
+          model: 'user',
+          key: 'user_id',
         },
       },
       session_id: {
@@ -23,16 +22,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
     },
-    {}
+    {},
   );
   Cart.associate = function (models) {
     Cart.belongsTo(models.user, {
-      foreignKey: { name: "user_id", allowNull: true },
-      onDelete: "cascade",
+      foreignKey: { name: 'user_id', allowNull: true },
+      onDelete: 'cascade',
     });
     Cart.hasMany(models.cartItem, {
-      foreignKey: "cart_id",
-      onDelete: "cascade",
+      foreignKey: 'cart_id',
+      onDelete: 'cascade',
     });
   };
   return Cart;

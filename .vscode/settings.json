@@ -1,0 +1,20 @@
+{
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "[javascript]": {
+      "editor.formatOnSave": false
+    },
+    //tell the ESLint plugin to run on save
+    "eslint.enable": true,
+    "eslint.packageManager": "yarn",
+    // Optional, if you have the prettier extension enabled
+    // "prettier.disableLanguages": ["js"],
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "[markdown]": {
+      "editor.wordWrap": "wordWrapColumn",
+      "editor.wordWrapColumn": 80
+    },
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  }

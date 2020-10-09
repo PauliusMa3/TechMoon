@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const TabManagerStyles = styled.div`
   display: flex;
@@ -7,7 +7,7 @@ export const TabManagerStyles = styled.div`
   margin-top: 2rem;
   padding: 0 2rem;
 
-  border-bottom: 1px solid ${props => props.theme.colors.lightGrey};
+  border-bottom: 1px solid ${(props) => props.theme.colors.lightGrey};
 
   *:not(:last-child) {
     margin-right: 4rem;
@@ -20,12 +20,12 @@ export const TabManagerStyles = styled.div`
     text-transform: capitalize;
 
     &:hover {
-      color: ${props => props.theme.colors.secondaryBlue};
+      color: ${(props) => props.theme.colors.secondaryBlue};
     }
   }
 
   .selected-tab {
-    color: ${props => props.theme.colors.secondaryBlue};
+    color: ${(props) => props.theme.colors.secondaryBlue};
 
     :after {
       content: "";
@@ -33,7 +33,7 @@ export const TabManagerStyles = styled.div`
       left: 0;
       right: 0;
       height: 3px;
-      background: ${props => props.theme.colors.secondaryBlue};
+      background: ${(props) => props.theme.colors.secondaryBlue};
       bottom: -1px;
     }
   }

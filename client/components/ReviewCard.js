@@ -1,7 +1,6 @@
-import React from "React";
+import React from 'React';
 import styled from 'styled-components';
-import {FaUserCircle} from 'react-icons/fa'
-
+import { FaUserCircle } from 'react-icons/fa';
 
 const ReviewCardContainer = styled.div`
   padding: 1rem 1rem 1rem 2rem;
@@ -21,7 +20,7 @@ const ReviewHeroSection = styled.div`
         font-size: 1.1rem;
         margin: 0;
     }
-`
+`;
 
 const ReviewRating = styled.div`
     display:flex;
@@ -32,44 +31,43 @@ const ReviewRating = styled.div`
   margin-right: 1rem;
   `;
 
-  const ReviewAuthor = styled.div`
+const ReviewAuthor = styled.div`
     display: flex;
     align-items: center;
 
     span {
         font-size: 0.9rem;
     }
-  `
+  `;
 
-  const UserWithNoAvatar = styled(FaUserCircle)`
+const UserWithNoAvatar = styled(FaUserCircle)`
     font-size: 2rem;
-    fill: ${props => props.theme.colors.secondaryGrey};
+    fill: ${(props) => props.theme.colors.secondaryGrey};
     margin-right: 1rem;
-  `
-
+  `;
 
 const ReviewDescription = styled.p`
     font-size: 1rem;
     line-height: 20px;
 `;
 
-const ReviewCard = ({review}) => 
-      <ReviewCardContainer>
-        <ReviewAuthor>
-          <UserWithNoAvatar />
-          <span>{review.author}</span>
-        </ReviewAuthor>
-        <ReviewHeroSection>
-          <ReviewRating>
-            {`★`.repeat(review.rating)}
+const ReviewCard = ({ review }) => (
+  <ReviewCardContainer>
+    <ReviewAuthor>
+      <UserWithNoAvatar />
+      <span>{review.author}</span>
+    </ReviewAuthor>
+    <ReviewHeroSection>
+      <ReviewRating>
+        {'★'.repeat(review.rating)}
 
-            {`☆`.repeat(5 - review.rating)}
-          </ReviewRating>
-          <h4>{review.title}</h4>
-        </ReviewHeroSection>
+        {'☆'.repeat(5 - review.rating)}
+      </ReviewRating>
+      <h4>{review.title}</h4>
+    </ReviewHeroSection>
 
-        <ReviewDescription>{review.description}</ReviewDescription>
-      </ReviewCardContainer>
-
+    <ReviewDescription>{review.description}</ReviewDescription>
+  </ReviewCardContainer>
+);
 
 export default ReviewCard;

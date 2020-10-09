@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { useRouter } from 'next/router';
 import Header from './Header';
 import Footer from './Footer';
 import { useCartDispatch } from '../src/cart-context';
 import { useAuth } from '../src/auth-context';
-import { useRouter } from 'next/router';
+import Cart from './Cart';
 
 const theme = {
   colors: {
@@ -60,7 +61,7 @@ const GlobalStyles = createGlobalStyle`
 const Inner = styled.div`
   max-width: 1300px;
   margin: 0 auto;
-  font-family: 'Robo-regular';
+  font-family: "Robo-regular";
   width: 100%;
   height: 100%;
   display: grid;
@@ -94,20 +95,23 @@ const Page = (props) => {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
-  console.log('router.pathanme: ', router.pathname);
-
   useEffect(() => {
     fetchCart();
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <StyledPage>
+      <GlobalStyles />      
+
+
+
+
+              <StyledPage>
         {router.pathname.includes('checkout') ? (
           <CustomPage>{props.children}</CustomPage>
         ) : (
           <Inner>
+            <Cart />
             <Header />
             {props.children}
             <Footer />

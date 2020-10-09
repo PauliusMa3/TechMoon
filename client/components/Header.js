@@ -1,14 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useQuery } from '@apollo/react-hooks';
 import Search from './Search';
 import StoreName from './StoreName';
 import Nav from './Nav';
-import Cart, {LOCAL_CART_QUERY} from './Cart';
+import Cart, { LOCAL_CART_QUERY } from './Cart';
 import SearchItem from './SearchItem';
-
-import {useQuery} from '@apollo/react-hooks'
-
-
 
 const Container = styled.div`
   width: 100%;
@@ -18,25 +15,23 @@ const Container = styled.div`
   grid-template-columns: repeat(3, auto);
   align-items: center;
   padding: 0.5rem;
-  top:0;
+  top: 0;
   justify-content: space-between;
   /* overflow: hidden; */
   align-items: center;
   position: relative;
 `;
 
-
 const Header = () => {
   const { data } = useQuery(LOCAL_CART_QUERY);
-    return (
-      <Container>
-        <StoreName />
-        <SearchItem />
-        <Nav />
-        {data.cartOpen && <Cart />}
-      </Container>
-    );
-
-}
+  return (
+    <Container>
+      <StoreName />
+      <SearchItem />
+      <Nav />
+      {/* {data.cartOpen && <Cart />} */}
+    </Container>
+  );
+};
 
 export default Header;

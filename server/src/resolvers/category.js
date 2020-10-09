@@ -1,11 +1,9 @@
-const {productCategoryService} = require('../services')
+const { productCategoryService } = require('../services');
 
 const CategoryQueries = {
-    categories: async(parent, args, ctx,info) => {
-        return productCategoryService.getCategories();
-    }
-}
+  categories: async (parent, args, ctx, info) => productCategoryService.getCategories(),
+};
 
 module.exports = {
-    CategoryQueries
-}
+  CategoryQueries,
+};

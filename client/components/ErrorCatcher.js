@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 
@@ -43,29 +43,37 @@ const ErrorBannerStyles = styled.div`
   }
 `;
 
-const ErrorCatcher = ({ error,shouldLogin }) => {
-    const [isDisplayed, setIsDisplayed] = useState(true);
+const ErrorCatcher = ({ error, shouldLogin }) => {
+  const [isDisplayed, setIsDisplayed] = useState(true);
 
-    return (
-      isDisplayed ? (<ErrorBannerStyles>
+  return (
+    isDisplayed ? (
+      <ErrorBannerStyles>
         <div className="error_banner_info">
           <h3>Error</h3>
-          <div>
+          <div>     
+
+            
             <span>{error.message}</span>
           </div>
         </div>
 
         <div className="error_banner_actions">
           {shouldLogin && (
-            <Link href="/signin">
-              <a onClick={() => {
-                  setIsDisplayed(false);
-              }}>Log In</a>
-            </Link>
+          <Link href="/signin">
+            <a onClick={() => {
+              setIsDisplayed(false);
+            }}
+            >
+              Log In
+
+            </a>
+          </Link>
           )}
         </div>
-      </ErrorBannerStyles>) : null
-    );
+      </ErrorBannerStyles>
+    ) : null
+  );
 };
 
 export default ErrorCatcher;

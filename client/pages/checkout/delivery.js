@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import MultiStepCheckout from '../../components/CheckoutMultiForm';
 import styled from 'styled-components';
-import CartItemsList from '../../components/CartItemsList';
 import { FaTruck, FaStore } from 'react-icons/fa';
+import MultiStepCheckout from '../../components/CheckoutMultiForm';
+import CartItemsList from '../../components/CartItemsList';
 import formatMoney from '../../utils/formatMoney';
 import { useCartState } from '../../src/cart-context';
 import totalPrice from '../../utils/totalPrice';

@@ -1,6 +1,6 @@
-import React from "react"; 
-import SignInForm from '../components/SigninForm';
+import React from 'react';
 import styled from 'styled-components';
+import SignInForm from '../components/SigninForm';
 
 const SingInPageStyles = styled.div`
   display: flex;
@@ -8,13 +8,10 @@ const SingInPageStyles = styled.div`
   align-items: center;
 `;
 
-const SignInPage = () => {
-
-   return (
-     <SingInPageStyles>
-       <SignInForm />
-     </SingInPageStyles>
-   );
-};
+const SignInPage = () => (
+  <SingInPageStyles>
+    <SignInForm />
+  </SingInPageStyles>
+);
 
 export default SignInPage;

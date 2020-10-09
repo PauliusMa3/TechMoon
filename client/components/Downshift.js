@@ -1,7 +1,7 @@
 import React from 'react';
 import Downshift from 'downshift';
-import styled, {css} from 'styled-components';
-import {ifProp} from 'styled-tools';
+import styled, { css } from 'styled-components';
+import { ifProp } from 'styled-tools';
 import formatMoney from '../utils/formatMoney';
 
 const Dropdown = styled.div`
@@ -19,13 +19,13 @@ const DropdownItem = styled.div`
   cursor: pointer;
 
   ${ifProp(
-    "highlighted",
+    'highlighted',
     css`
       background: ${(props) => props.theme.colors.lightGrey};
     `,
     css`
       background: ${(props) => props.theme.colors.white};
-    `
+    `,
   )}
 
   h4 {
@@ -41,7 +41,6 @@ const DropdownItem = styled.div`
   }
 `;
 
-
 const DownshiftCmp = ({
   routeToItem,
   handleInputChange,
@@ -51,21 +50,21 @@ const DownshiftCmp = ({
 }) => (
   <Downshift
     onChange={routeToItem}
-    itemToString={(item) => (item ? item.name : "")}
+    itemToString={(item) => (item ? item.name : '')}
   >
     {({
       getInputProps,
       getItemProps,
       isOpen,
       inputValue,
-      highlightedIndex
+      highlightedIndex,
     }) => (
       <div>
         <input
           {...getInputProps({
-            placeholder: "Search...",
-            type: "search",
-            name: "search",
+            placeholder: 'Search...',
+            type: 'search',
+            name: 'search',
             onChange: (e) => {
               e.persist();
               handleInputChange(e);
@@ -90,7 +89,9 @@ const DownshiftCmp = ({
             {!items.length && !loading && inputValue && (
               <DropdownItem>
                 <div>
-                  Nothing Found for <strong>{` "${inputValue}"`}</strong>
+                  Nothing Found for
+                  {' '}
+                  <strong>{` "${inputValue}"`}</strong>
                 </div>
               </DropdownItem>
             )}

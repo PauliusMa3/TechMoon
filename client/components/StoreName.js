@@ -20,14 +20,12 @@ const StoreNameStyles = styled.h1`
   transform: skew(-15deg);
 `;
 
-const StoreName = ({size}) => {
-    return (
-      <StoreNameStyles size={size}>
-        <Link href="/">
-          <a>TechMoon</a>
-        </Link>
-      </StoreNameStyles>
-    );
-}
+const StoreName = ({ size }) => (
+  <StoreNameStyles size={size}>
+    <Link href="/">
+      <a>TechMoon</a>
+    </Link>
+  </StoreNameStyles>
+);
 
 export default StoreName;

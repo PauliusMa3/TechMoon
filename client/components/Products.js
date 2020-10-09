@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import AddToCartButton from './AddToCartButton';
 import slug from 'slug';
 import Router from 'next/router';
-import formatMoney from '../utils/formatMoney';
 import gql from 'graphql-tag';
-import Loading from './Loading';
 import { useQuery } from '@apollo/react-hooks';
+import formatMoney from '../utils/formatMoney';
+import Loading from './Loading';
+import AddToCartButton from './AddToCartButton';
 import Pagination from './Pagination';
 
 export const productsQuery = gql`

@@ -1,21 +1,22 @@
-const express = require("express");
-const cors = require("cors");
-const { ApolloServer } = require("apollo-server-express");
-const { typeDefs } = require("./schema/index");
-const { resolve } = require("path");
-require("dotenv").config({ path: resolve(__dirname, "../../variables.env") });
-const { rootResolver } = require("./resolvers/index");
-const db = require("../models");
-const passport = require("passport");
-const session = require("express-session");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
-const redis = require("redis");
-let RedisStore = require("connect-redis")(session);
-let redisClient = redis.createClient();
+const express = require('express');
+const cors = require('cors');
+const { ApolloServer } = require('apollo-server-express');
+const { resolve } = require('path');
+require('dotenv').config({ path: resolve(__dirname, '../../variables.env') });
+const passport = require('passport');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const redis = require('redis');
+const RedisStore = require('connect-redis')(session);
 
-const LocalStrategy = require("passport-local").Strategy;
+const redisClient = redis.createClient();
+
+const LocalStrategy = require('passport-local').Strategy;
+const db = require('../models');
+const { rootResolver } = require('./resolvers/index');
+const { typeDefs } = require('./schema/index');
 
 const start = () => {
   const app = express();
@@ -37,7 +38,7 @@ const start = () => {
     cors({
       origin: process.env.CLIENT_URL,
       credentials: true,
-    })
+    }),
   );
 
   app.use(session(sessionConfig));
@@ -67,14 +68,14 @@ const start = () => {
   passport.use(
     new LocalStrategy(
       {
-        usernameField: "email",
-        passwordField: "password",
+        usernameField: 'email',
+        passwordField: 'password',
       },
-      function (email, password, done) {
+      ((email, password, done) => {
         db.user
           .findOne({ where: { email } })
           .then((user) => {
-            bcrypt.compare(password, user.password, function (err, res) {
+            bcrypt.compare(password, user.password, (err, res) => {
               if (res) {
                 done(null, { id: user.id, name: user.name, email: user.email });
               } else {
@@ -83,8 +84,8 @@ const start = () => {
             });
           })
           .catch((e) => done(e, null));
-      }
-    )
+      }),
+    ),
   );
 
   app.use(passport.initialize());
@@ -94,40 +95,40 @@ const start = () => {
   // app.post("/login", passport.authenticate("local"), function (req, res) {
   //   res.json({ success: true });
   // });
-  app.post("/login", function (req, res, next) {
+  app.post('/login', (req, res, next) => {
     /* look at the 2nd parameter to the below call */
-    passport.authenticate("local", function (err, user, info) {
+    passport.authenticate('local', (err, user, info) => {
       // if (err) {
       //   return next(err);
       // }
-      console.log("err: ", err);
-      console.log("user: ", user);
+      console.log('err: ', err);
+      console.log('user: ', user);
       if (!user) {
         res
           .status(401)
-          .send({ message: "Invalid email or password", success: false });
+          .send({ message: 'Invalid email or password', success: false });
         return next();
       }
 
-      req.logIn(user, function (err) {
+      req.logIn(user, (err) => {
         if (err) {
           return next(err);
         }
 
-        console.log("will Login: ", user);
+        console.log('will Login: ', user);
         // return res.redirect("/");
         return res.json({ success: true });
       });
     })(req, res, next);
   });
 
-  app.get("/logout", (req, res) => {
+  app.get('/logout', (req, res) => {
     req.logout();
 
-    res.send({ message: "Successfully logged out!" });
+    res.send({ message: 'Successfully logged out!' });
   });
 
-  app.get("/auth/userDetails", (req, res) => {
+  app.get('/auth/userDetails', (req, res) => {
     if (req.user) {
       res.json({
         success: true,
@@ -162,9 +163,7 @@ const start = () => {
     },
   });
 
-  app.listen(process.env.BACKEND_PORT, () =>
-    console.log(`App running on port port ${process.env.BACKEND_PORT}`)
-  );
+  app.listen(process.env.BACKEND_PORT, () => console.log(`App running on port port ${process.env.BACKEND_PORT}`));
 };
 
 start();

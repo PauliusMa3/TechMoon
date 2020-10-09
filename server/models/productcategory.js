@@ -1,4 +1,3 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ProductCategory = sequelize.define('productCategory', {
     product_id: {
@@ -6,18 +5,18 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false,
       references: {
-          model: 'Product',
-          key: 'product_id'
-      }
+        model: 'Product',
+        key: 'product_id',
+      },
     },
     category_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
       references: {
-          model: 'Category',
-          key: 'category_id'
-      }
+        model: 'Category',
+        key: 'category_id',
+      },
     },
   }, {
     indexes: [
@@ -26,18 +25,18 @@ module.exports = (sequelize, DataTypes) => {
         using: 'BTREE',
         fields: [
           'product_id',
-        ]
+        ],
       },
       {
         name: 'idx_pc_category',
         using: 'BTREE',
         fields: [
           'category_id',
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   });
-  ProductCategory.associate = function(models) {
+  ProductCategory.associate = function (models) {
     // associations can be defined here
     ProductCategory.belongsTo(models.product, { foreignKey: 'product_id' });
     ProductCategory.belongsTo(models.category, { foreignKey: 'category_id' });

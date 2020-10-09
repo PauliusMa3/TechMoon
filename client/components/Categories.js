@@ -1,11 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { useQuery } from "@apollo/react-hooks";
+import React from 'react';
+import styled from 'styled-components';
+import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import Loading from './Loading';
 import Error from './ErrorCatcher';
 import Category from './Category';
-
 
 const FETCH_CATEGORIES = gql`
   query {
@@ -23,21 +22,19 @@ const CategoriesStyles = styled.div`
 `;
 
 const Categories = () => {
-    const {data, loading, error} = useQuery(FETCH_CATEGORIES);
+  const { data, loading, error } = useQuery(FETCH_CATEGORIES);
 
-    if(loading) return <Loading />
-    // if(error) return <Error error={error}/>
+  if (loading) return <Loading />;
+  // if(error) return <Error error={error}/>
 
-    return (
-        <CategoriesStyles>
-            {
-                data.categories.map(category => 
-                    <Category category={category}/>)
-            
+  return (
+    <CategoriesStyles>
+      {
+                data.categories.map((category) => <Category category={category} />)
+
             }
-        </CategoriesStyles>
-    )
-
+    </CategoriesStyles>
+  );
 };
 
 export default Categories;

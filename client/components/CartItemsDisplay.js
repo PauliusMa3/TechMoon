@@ -1,21 +1,18 @@
-
-import React, { useEffect } from "react";
-import { useCartState, useCartDispatch } from "../src/cart-context";
-import styled from "styled-components";
-import Loading from "./Loading";
-import Error from "./ErrorCatcher";
-import Link from "next/link";
-import slug from "slug";
-import QuantitySelector from "./QuantitySelector";
-import formatMoney from "../utils/formatMoney";
-import RemoveFromCart from "./RemoveFromCart";
-
-
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import Link from 'next/link';
+import slug from 'slug';
+import { useCartState, useCartDispatch } from '../src/cart-context';
+import Loading from './Loading';
+import Error from './ErrorCatcher';
+import QuantitySelector from './QuantitySelector';
+import formatMoney from '../utils/formatMoney';
+import RemoveFromCart from './RemoveFromCart';
 
 const ProductsInCart = styled.div`
   margin-top: 2rem;
   padding: 0 0.7rem;
-  background: ${props => props.theme.colors.white};
+  background: ${(props) => props.theme.colors.white};
 
   div:not(:first-child) {
     margin-top: 2rem;
@@ -79,31 +76,29 @@ const ProductActions = styled.div`
   }
 `;
 
-
-
 const CartItemsDisplay = () => {
+  const {
+    cart, numberOfCartItems, isLoading, error,
+  } = useCartState();
 
-    const { cart, numberOfCartItems, isLoading, error } = useCartState();
+  if (isLoading) return (<Loading />);
 
-    if(isLoading) return (<Loading />)
-
-    return (
-      <ProductsInCart>
-        {cart &&
-          cart.cartItems.map((cartItem) => {
-            return (
-              <Row key={cartItem.id}>
-                <img src={cartItem.image} />
-                <ProductDetails>
-                  <Link
-                    href={`/product/${slug(cartItem.name)}?id=${
-                      cartItem.productId
-                    }`}
-                  >
-                    <a>{cartItem.name}</a>
-                  </Link>
-                  <small>{"hidden"}</small>
-                  {/* <ProductActions>
+  return (
+    <ProductsInCart>
+      {cart
+          && cart.cartItems.map((cartItem) => (
+            <Row key={cartItem.id}>
+              <img src={cartItem.image} />
+              <ProductDetails>
+                <Link
+                  href={`/product/${slug(cartItem.name)}?id=${
+                    cartItem.productId
+                  }`}
+                >
+                  <a>{cartItem.name}</a>
+                </Link>
+                <small>hidden</small>
+                {/* <ProductActions>
                     <QuantitySelector
                       quantity={cartItem.quantity}
                       productId={cartItem.productId}
@@ -116,13 +111,12 @@ const CartItemsDisplay = () => {
                       <span className="product_actions_remove">Remove</span>
                     </RemoveFromCart>
                   </ProductActions> */}
-                </ProductDetails>
-                <ProductPrice>{formatMoney(cartItem.price)}</ProductPrice>
-              </Row>
-            );
-          })}
-      </ProductsInCart>
-    );
-}
+              </ProductDetails>
+              <ProductPrice>{formatMoney(cartItem.price)}</ProductPrice>
+            </Row>
+          ))}
+    </ProductsInCart>
+  );
+};
 
 export default CartItemsDisplay;

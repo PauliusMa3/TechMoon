@@ -22,7 +22,7 @@ const QuantityButton = styled.button`
   color: ${ifProp(
     'minus',
     'red',
-    `${(props) => props.theme.colors.secondaryBlue}`
+    `${(props) => props.theme.colors.secondaryBlue}`,
   )};
   font-size: 1.3rem;
 

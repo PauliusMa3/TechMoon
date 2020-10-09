@@ -1,18 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 const useClickOutside = (close) => {
   const dropdownRef = useRef(null);
-  const handleClick = e => {
+  const handleClick = (e) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       close();
     }
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClick);
+    document.addEventListener('mousedown', handleClick);
 
     return () => {
-      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener('mousedown', handleClick);
     };
   });
 

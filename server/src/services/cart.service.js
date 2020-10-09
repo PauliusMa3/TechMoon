@@ -1,25 +1,25 @@
-const db = require("../../models");
-const { v4 } = require("uuid");
-const { Op } = require("sequelize");
-const { session } = require("passport");
+const { v4 } = require('uuid');
+const { Op } = require('sequelize');
+const { session } = require('passport');
+const db = require('../../models');
 
 const identifiedParam = ({ sessionId, userId }) => {
   if (userId && !sessionId) {
-    return { column: "user_id", value: userId };
+    return { column: 'user_id', value: userId };
   }
 
   if (sessionId) {
-    return { column: "session_id", value: sessionId };
+    return { column: 'session_id', value: sessionId };
   }
 
   return null;
 };
 
 const fetchCart = async ({ req }) => {
-  console.log("fetchCart req.session: ", req.session);
+  console.log('fetchCart req.session: ', req.session);
 
   const userId = req.user ? req.user.id : null;
-  console.log("userId: ", userId);
+  console.log('userId: ', userId);
 
   const sessionId = req.session.cartSessionId
     ? req.session.cartSessionId
@@ -35,10 +35,10 @@ const fetchCart = async ({ req }) => {
     where: {
       [`${column}`]: value,
     },
-    attributes: ["id", ["user_id", "userId"], ["session_id", "sessionId"]],
+    attributes: ['id', ['user_id', 'userId'], ['session_id', 'sessionId']],
     include: {
       model: db.cartItem,
-      as: "cartItems",
+      as: 'cartItems',
       include: {
         model: db.product,
       },
@@ -47,7 +47,7 @@ const fetchCart = async ({ req }) => {
 
   const { userId: dbUserId, sessionId: dbSessionId } = shoppingCart.dataValues;
   if (userId && dbSessionId) {
-    console.log("will get rid of user Cart");
+    console.log('will get rid of user Cart');
     await db.cart.destroy({
       where: {
         user_id: userId,
@@ -65,13 +65,13 @@ const fetchCart = async ({ req }) => {
         where: {
           session_id: sessionId,
         },
-      }
+      },
     );
 
     delete req.session.cartSessionId;
   }
 
-  const shoppingCartItems = shoppingCart.get("cartItems").map((item) => ({
+  const shoppingCartItems = shoppingCart.get('cartItems').map((item) => ({
     id: item.id,
     productId: item.product_id,
     cartId: item.cart_id,
@@ -88,8 +88,10 @@ const fetchCart = async ({ req }) => {
   };
 };
 
-const addToCart = async ({ productId, decreaseQuantity, sessionId, req }) => {
-  console.log("adding to cart");
+const addToCart = async ({
+  productId, decreaseQuantity, sessionId, req,
+}) => {
+  console.log('adding to cart');
   const userId = req.user ? req.user.id : null;
   const existingCart = await db.cart.findOne({
     where: {
@@ -108,7 +110,7 @@ const addToCart = async ({ productId, decreaseQuantity, sessionId, req }) => {
     },
   });
 
-  console.log("existing cart ", existingCart);
+  console.log('existing cart ', existingCart);
 
   if (existingCart) {
     const existingItemInTheCart = await db.cartItem.findOne({
@@ -116,7 +118,7 @@ const addToCart = async ({ productId, decreaseQuantity, sessionId, req }) => {
         cart_id: existingCart.id,
         product_id: productId,
       },
-      attributes: ["id", "quantity"],
+      attributes: ['id', 'quantity'],
     });
 
     if (existingItemInTheCart) {
@@ -131,7 +133,7 @@ const addToCart = async ({ productId, decreaseQuantity, sessionId, req }) => {
           where: {
             id: existingItemInTheCart.id,
           },
-        }
+        },
       );
       return;
     }
@@ -174,10 +176,10 @@ const deleteCart = async ({ cartId }) => {
     });
 
     return {
-      message: "Shopping has been successfully deleted.",
+      message: 'Shopping has been successfully deleted.',
     };
   } catch (e) {
-    console.log("Failed to delete users shopping cart!", cartId);
+    console.log('Failed to delete users shopping cart!', cartId);
   }
 };
 
@@ -203,7 +205,7 @@ const removeFromCart = async ({ cartId, cartItemId }) => {
     },
   });
   return {
-    message: "Product was successfully removed from the cart",
+    message: 'Product was successfully removed from the cart',
   };
 };
 

@@ -8,8 +8,8 @@ import React, {
 import Cookies from 'js-cookie';
 import gql from 'graphql-tag';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
-import AddToCartButton from '../components/AddToCartButton';
 import { v4 as uuidv4 } from 'uuid';
+import AddToCartButton from '../components/AddToCartButton';
 
 const CartStateContext = React.createContext();
 const CartDispatchContext = React.createContext();
@@ -68,22 +68,21 @@ const addToCart = (state, cartItem) => {
     const updatedState = { ...state, cartItems: updatedCartItems };
     Cookies.set('cart', updatedState);
     return updatedState;
-  } else {
-    cartItem.quantity = 1;
-    cartItem.id = uuidv4();
-
-    const updatedState = {
-      ...state,
-      cartItems: [...state.cartItems, cartItem],
-    };
-    Cookies.set('cart', updatedState);
-    return updatedState;
   }
+  cartItem.quantity = 1;
+  cartItem.id = uuidv4();
+
+  const updatedState = {
+    ...state,
+    cartItems: [...state.cartItems, cartItem],
+  };
+  Cookies.set('cart', updatedState);
+  return updatedState;
 };
 
 const removeFromCart = (state, cartItem) => {
   const updatedCartItems = state.cartItems.filter(
-    (item) => item.id !== cartItem.id
+    (item) => item.id !== cartItem.id,
   );
 
   const updatedState = {
@@ -136,7 +135,10 @@ function CartProvider({ children }) {
   // value={{ ...data, loading, error, status }}
 
   return (
-    <CartStateContext.Provider value={{ ...data, loading, error, status }}>
+    <CartStateContext.Provider value={{
+      ...data, loading, error, status,
+    }}
+    >
       <CartDispatchContext.Provider value={{ fetchCart }}>
         {children}
       </CartDispatchContext.Provider>
@@ -152,10 +154,9 @@ function useCartState() {
   }
 
   const isLoading = context.status === 'pending' || context.loading;
-  const numberOfCartItems =
-    context.cart && context.cart.cartItems.length
-      ? context.cart.cartItems.length
-      : 0;
+  const numberOfCartItems = context.cart && context.cart.cartItems.length
+    ? context.cart.cartItems.length
+    : 0;
 
   return {
     ...context,

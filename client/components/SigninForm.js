@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import Link from 'next/link';
+import axios from 'axios';
+import Router from 'next/router';
 import {
   FormStyles,
   UserIcon,
@@ -10,8 +12,6 @@ import {
   InputField,
   LinkToSignup,
 } from './styles/FormStyles';
-import axios from 'axios';
-import Router from 'next/router';
 import { useAuth } from '../src/auth-context';
 import { useCartDispatch } from '../src/cart-context';
 
@@ -20,7 +20,9 @@ const Form = () => {
   const [password, setPassword] = useState('123');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const { login, user, isLoading, error } = useAuth();
+  const {
+    login, user, isLoading, error,
+  } = useAuth();
   const { fetchCart } = useCartDispatch();
 
   const submitForm = async (e) => {

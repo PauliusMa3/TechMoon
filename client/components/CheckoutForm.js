@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import Loading from './Loading';
 import styled from 'styled-components';
 import Router from 'next/router';
+import Loading from './Loading';
 import { useCartState } from '../src/cart-context';
 import { useForm } from '../src/form-context';
 
@@ -42,22 +42,20 @@ const Field = ({
   autoComplete,
   value,
   onChange,
-}) => {
-  return (
-    <FieldStyles>
-      <label htmlFor={id}>{label}</label>
-      <input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        required={required}
-        autoComplete={autoComplete}
-        value={value}
-        onChange={onChange}
-      />
-    </FieldStyles>
-  );
-};
+}) => (
+  <FieldStyles>
+    <label htmlFor={id}>{label}</label>
+    <input
+      id={id}
+      type={type}
+      placeholder={placeholder}
+      required={required}
+      autoComplete={autoComplete}
+      value={value}
+      onChange={onChange}
+    />
+  </FieldStyles>
+);
 export default function CheckoutForm() {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
@@ -146,23 +144,19 @@ export default function CheckoutForm() {
         id="email"
         type="email"
         placeholder="Enter your e-mail"
-        required={true}
+        required
         value={billingDetails.email}
-        label={'Email'}
-        onChange={(e) =>
-          setBillingDetails({ ...billingDetails, email: e.target.value })
-        }
+        label="Email"
+        onChange={(e) => setBillingDetails({ ...billingDetails, email: e.target.value })}
       />
       <Field
         id="name"
         type="name"
         placeholder="Name"
-        required={true}
+        required
         value={billingDetails.name}
-        label={'Name on the Card'}
-        onChange={(e) =>
-          setBillingDetails({ ...billingDetails, name: e.target.value })
-        }
+        label="Name on the Card"
+        onChange={(e) => setBillingDetails({ ...billingDetails, name: e.target.value })}
       />
       {/* id, type, placeholder, required, autoComplete, value, onChange, */}
       <label>Card Details</label>
@@ -173,7 +167,7 @@ export default function CheckoutForm() {
       />
       <button disabled={processing || disabled || succeeded} id="submit">
         <span id="button-text">
-          {processing ? <div className="spinner" id="spinner"></div> : 'Pay'}
+          {processing ? <div className="spinner" id="spinner" /> : 'Pay'}
         </span>
       </button>
       {/* Show any error that happens when processing the payment */}

@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import {
+  FaShoppingCart, FaUser, FaCreditCard, FaSignOutAlt,
+} from 'react-icons/fa';
 import axios from 'axios';
 import Router from 'next/router';
-import { useAuth } from '../src/auth-context';
-import Cart from './Cart';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
+import { useAuth } from '../src/auth-context';
+import Cart from './Cart';
 import { useCartState, useCartDispatch } from '../src/cart-context';
 import Dropdown from './Dropdown';
 import {
@@ -18,7 +20,6 @@ import {
   StyledUserIcon,
   NumberOfItemsInCart,
 } from './styles/NavStyles';
-import { FaCreditCard, FaSignOutAlt } from 'react-icons/fa';
 
 export const TOGGLE_CART_MUTATION = gql`
   mutation {

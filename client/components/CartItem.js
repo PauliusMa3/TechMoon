@@ -42,25 +42,23 @@ const CartItemStyles = styled.li`
   }
 `;
 
-const CartItem = ({ cartItem, cartId }) => {
-  return (
-    <CartItemStyles>
-      <img src={cartItem.image} />
-      <div className="item-details">
-        <Link href={`/product/${slug(cartItem.name)}?id=${cartItem.productId}`}>
-          <a>{cartItem.name}</a>
-        </Link>
-        <QuantitySelector
-          quantity={cartItem.quantity}
-          productId={cartItem.productId}
-        />
-        <span>{formatMoney(cartItem.price)}</span>
-      </div>
-      <RemoveFromCart cartItemId={cartItem.id} cartId={cartId}>
-        &times;
-      </RemoveFromCart>
-    </CartItemStyles>
-  );
-};
+const CartItem = ({ cartItem, cartId }) => (
+  <CartItemStyles>
+    <img src={cartItem.image} />
+    <div className="item-details">
+      <Link href={`/product/${slug(cartItem.name)}?id=${cartItem.productId}`}>
+        <a>{cartItem.name}</a>
+      </Link>
+      <QuantitySelector
+        quantity={cartItem.quantity}
+        productId={cartItem.productId}
+      />
+      <span>{formatMoney(cartItem.price)}</span>
+    </div>
+    <RemoveFromCart cartItemId={cartItem.id} cartId={cartId}>
+      &times;
+    </RemoveFromCart>
+  </CartItemStyles>
+);
 
 export default CartItem;

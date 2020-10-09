@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import CheckoutUserDetails from './CheckoutUserDetails';
-import StoreName from './StoreName';
 import Link from 'next/link';
 import { ifProp } from 'styled-tools';
-import Checkout from './Checkout';
 import { useRouter } from 'next/router';
+import CheckoutUserDetails from './CheckoutUserDetails';
+import StoreName from './StoreName';
+import Checkout from './Checkout';
 import { FormContainer } from '../src/form-context';
 import { authContext, useAuth } from '../src/auth-context';
 
@@ -71,16 +71,16 @@ const NavigationItemLink = styled.a`
     justify-content: center;
     align-items: center;
     ${ifProp(
-      'currentStep',
-      css`
+    'currentStep',
+    css`
         background: ${(props) => props.theme.colors.secondaryBlue};
         color: ${(props) => props.theme.colors.white};
       `,
-      css`
+    css`
         background: ${(props) => props.theme.colors.white};
         color: ${(props) => props.theme.colors.black};
-      `
-    )}
+      `,
+  )}
   }
 
   .nav_link_text {
@@ -145,24 +145,22 @@ const CheckoutMultiForm = ({
                 </header>
                 <nav>
                   <ul>
-                    {multiSteps.map((stepItem) => {
-                      return (
-                        <li key={stepItem.value}>
-                          <Link href="/checkout/delivery">
-                            <NavigationItemLink
-                              currentStep={stepItem.value === step.value}
-                            >
-                              <span className="nav_badge">
-                                {stepItem.value}
-                              </span>
-                              <span className="nav_link_text">
-                                {stepItem.label}
-                              </span>
-                            </NavigationItemLink>
-                          </Link>
-                        </li>
-                      );
-                    })}
+                    {multiSteps.map((stepItem) => (
+                      <li key={stepItem.value}>
+                        <Link href="/checkout/delivery">
+                          <NavigationItemLink
+                            currentStep={stepItem.value === step.value}
+                          >
+                            <span className="nav_badge">
+                              {stepItem.value}
+                            </span>
+                            <span className="nav_link_text">
+                              {stepItem.label}
+                            </span>
+                          </NavigationItemLink>
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </nav>
 
@@ -184,22 +182,20 @@ const CheckoutMultiForm = ({
               </header>
               <nav>
                 <ul>
-                  {multiSteps.map((stepItem) => {
-                    return (
-                      <li>
-                        <Link href="/checkout/payment">
-                          <NavigationItemLink
-                            currentStep={stepItem.value === step.value}
-                          >
-                            <span className="nav_badge">{stepItem.value}</span>
-                            <span className="nav_link_text">
-                              {stepItem.label}
-                            </span>
-                          </NavigationItemLink>
-                        </Link>
-                      </li>
-                    );
-                  })}
+                  {multiSteps.map((stepItem) => (
+                    <li>
+                      <Link href="/checkout/payment">
+                        <NavigationItemLink
+                          currentStep={stepItem.value === step.value}
+                        >
+                          <span className="nav_badge">{stepItem.value}</span>
+                          <span className="nav_link_text">
+                            {stepItem.label}
+                          </span>
+                        </NavigationItemLink>
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </nav>
               <Checkout />

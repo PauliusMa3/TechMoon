@@ -46,19 +46,21 @@ const CartItemsList = () => {
     <CartItemsListStyles>
       <h4>Shopping Cart</h4>
       <ul>
-        {cart &&
-          cart.cartItems.map((cartItem) => {
-            return (
-              <CartListItem key={cartItem.id}>
-                <span>{cartItem.quantity} &times;</span>
-                <img src={cartItem.image} height={40} width={40} />
-                <p>{cartItem.name}</p>
-                <p className="price">
-                  {formatMoney(cartItem.price * cartItem.quantity)}
-                </p>
-              </CartListItem>
-            );
-          })}
+        {cart
+          && cart.cartItems.map((cartItem) => (
+            <CartListItem key={cartItem.id}>
+              <span>
+                {cartItem.quantity}
+                {' '}
+                &times;
+              </span>
+              <img src={cartItem.image} height={40} width={40} />
+              <p>{cartItem.name}</p>
+              <p className="price">
+                {formatMoney(cartItem.price * cartItem.quantity)}
+              </p>
+            </CartListItem>
+          ))}
       </ul>
     </CartItemsListStyles>
   );

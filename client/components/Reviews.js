@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 import ReviewCard from './ReviewCard';
 import ReviewForm from './reviewForm';
-import {useAuth} from '../src/auth-context';
-import {useQuery} from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { useAuth } from '../src/auth-context';
 import Loading from './Loading';
 
 const ReviewContainer = styled.div`
@@ -13,7 +13,6 @@ const ReviewContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
 
 export const FETCH_REVIEWS_QUERY = gql`
   query FETCH_REVIEWS_QEURY($productId: ID!) {
@@ -28,7 +27,7 @@ export const FETCH_REVIEWS_QUERY = gql`
   }
 `;
 
-const ReviewStats=styled.div`
+const ReviewStats = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -41,63 +40,64 @@ const ReviewStats=styled.div`
 
     p {
         font-size: 0.7rem;
-        color: ${props => props.theme.colors.secondaryGrey};
+        color: ${(props) => props.theme.colors.secondaryGrey};
     }
-`
+`;
 
 const ReviewLabel = styled.span`
     font-family: 'Mont-bold';
     font-size: 1.2rem;
-`
+`;
 const Star = styled.div`
   color: #ffbf00;
   font-size: 1rem;
   padding: 0.5rem;
 `;
-const ReviewAverageStars =styled.div`
+const ReviewAverageStars = styled.div`
     display: flex;
-`
-const Reviews = ({productId, reviewsCount}) => {
+`;
+const Reviews = ({ productId, reviewsCount }) => {
+  const { isAuthenticated } = useAuth();
 
-  const {isAuthenticated} = useAuth();
-
-  const {data, loading, error}= useQuery(FETCH_REVIEWS_QUERY, {
+  const { data, loading, error } = useQuery(FETCH_REVIEWS_QUERY, {
     variables: {
-      productId: productId
-    }
+      productId,
+    },
   });
-  
-    const numberOfFullStars = `★`.repeat(1).split("");
-    const numberOfEmptyStars = `☆`.repeat(4).split("");
 
-    return (
-      <ReviewContainer>
-        {loading ? (
-          <Loading />
-        ) : (
-          <>
-            <ReviewStats>
-              <ReviewLabel>Reviews</ReviewLabel>
-              <strong>4.0</strong>
-              <ReviewAverageStars>
-                {numberOfFullStars.map((star) => (
-                  <Star>{star}</Star>
-                ))}
-                {numberOfEmptyStars.map((star) => (
-                  <Star>{star}</Star>
-                ))}
-              </ReviewAverageStars>
-              <p>{`based on ${reviewsCount} review${
-                reviewsCount === 1 ? "" : "s"
-              }`}</p>
-            </ReviewStats>
-            {isAuthenticated && <ReviewForm productId={productId} />}
-            {!loading &&
-              data.reviews.map((review) => <ReviewCard review={review} />)}
-          </>
-        )}
-      </ReviewContainer>
-    );
+  const numberOfFullStars = '★'.repeat(1).split('');
+  const numberOfEmptyStars = '☆'.repeat(4).split('');
+
+  return (
+    <ReviewContainer>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <ReviewStats>
+            <ReviewLabel>Reviews</ReviewLabel>
+            <strong>4.0</strong>
+            <ReviewAverageStars>
+              {numberOfFullStars.map((star) => (
+                <Star>{star}</Star>
+              ))}
+              {numberOfEmptyStars.map((star) => (
+                <Star>{star}</Star>
+              ))}
+            </ReviewAverageStars>
+            <p>
+              {`based on ${reviewsCount} review${
+                reviewsCount === 1 ? '' : 's'
+              }`}
+            </p>
+          </ReviewStats>
+          {isAuthenticated && <ReviewForm productId={productId} />}
+          {!loading
+              && data.reviews.map((review) => <ReviewCard review={review} />)}
+        </>
+      )}
+    </ReviewContainer>
+  );
 };
 
 export default Reviews;

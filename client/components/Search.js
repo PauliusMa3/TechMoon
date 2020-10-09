@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {FaSearch} from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 
 const StyledIcon = styled(FaSearch)`
   color: ${(props) => props.theme.colors.primaryBlue};
@@ -9,7 +9,6 @@ const StyledIcon = styled(FaSearch)`
     cursor: pointer;
   }
 `;
-
 
 const Form = styled.form`
   border: 1px solid ${(props) => props.theme.colors.lightGrey};
@@ -41,18 +40,18 @@ const Form = styled.form`
 `;
 
 const Search = () => {
-
-   return ( 
+  return (
   //  <Form>
-      <>
-        <input 
+    <>
+      <input
         type="text"
-        placeholder= "Search ..."
-        />
-        <StyledIcon />
-        </>)
-{/* 
-    </Form>) */}
-}
+        placeholder="Search ..."
+      />
+      <StyledIcon />
+    </>
+  );
+  { /*
+    </Form>) */ }
+};
 
 export default Search;

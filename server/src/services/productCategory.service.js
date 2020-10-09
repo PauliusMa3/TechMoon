@@ -1,51 +1,49 @@
 const db = require('../../models');
 
+const getCategories = async () => {
+  const result = await db.category.findAll({
+  });
+  return result;
+};
 
-const getCategories = async() => {
+const getProductsForCategory = async ({ categoryId, limit, skip }) => {
+  const result = await db.productCategory.findAndCountAll({
+    where: {
+      category_id: categoryId,
+    },
+    attributes: {
+      exclude: ['createdAt', 'updatedAt'],
+    },
+    include: [
+      {
+        model: db.product,
+      },
+      {
+        model: db.category,
+      },
+    ],
+    limit,
+    offset: skip,
+    // order: [
+    //     ['createdAt', 'DESC']
+    // ]
+  });
 
-    const result = await db.category.findAll({       
-    });
-    return result;
-}
+  console.log('result for pagination: ', result);
 
-const getProductsForCategory = async({categoryId, limit, skip}) => {
-    const result = await db.productCategory.findAndCountAll({
-        where: {
-            category_id: categoryId
-        },
-        attributes: {
-            exclude: ['createdAt', 'updatedAt'],
-        },
-        include: [
-            {
-                model: db.product,
-            },
-            {
-                model: db.category
-            }
-        ],
-        limit,
-        offset: skip,
-        // order: [
-        //     ['createdAt', 'DESC']
-        // ]
-    });
+  const categoryProducts = result.rows.map((productCategory) => ({
+    ...productCategory.product.dataValues,
+  }));
 
-    console.log('result for pagination: ', result);
-
-    const categoryProducts = result.rows.map(productCategory => ({
-        ...productCategory.product.dataValues
-    }));
-
-    return {
-        count: result.count,
-        categoryName: result.rows[0].category.name,
-        categoryId,
-        products: [...categoryProducts]
-    };
-}
+  return {
+    count: result.count,
+    categoryName: result.rows[0].category.name,
+    categoryId,
+    products: [...categoryProducts],
+  };
+};
 
 module.exports = {
-    getCategories,
-    getProductsForCategory
-}
+  getCategories,
+  getProductsForCategory,
+};

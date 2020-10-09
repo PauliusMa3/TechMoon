@@ -1,6 +1,6 @@
-const { v4 } = require("uuid");
-const { requiresLogin } = require("./utils");
-const { cartService } = require("../services");
+const { v4 } = require('uuid');
+const { requiresLogin } = require('./utils');
+const { cartService } = require('../services');
 
 const CartQueries = {
   cart: async (parent, args, { req }, info) => {
@@ -11,15 +11,11 @@ const CartQueries = {
 
 const CartMutations = {
   addToCart: (parent, args, { db, req }, info) => {
-    console.log("access here cart resolver");
+    console.log('access here cart resolver');
     return cartService.addToCart({ ...args, req });
   },
-  removeFromCart: requiresLogin((parent, args, ctx) => {
-    return cartService.removeFromCart(args);
-  }),
-  deleteCart: async (parent, args, ctx, info) => {
-    return cartService.deleteCart({ cartId: args.cartId });
-  },
+  removeFromCart: requiresLogin((parent, args, ctx) => cartService.removeFromCart(args)),
+  deleteCart: async (parent, args, ctx, info) => cartService.deleteCart({ cartId: args.cartId }),
 };
 
 module.exports = {

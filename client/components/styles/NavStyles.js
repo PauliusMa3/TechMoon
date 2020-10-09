@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { FaShoppingCart, FaUser } from "react-icons/fa";
+import styled from 'styled-components';
+import { FaShoppingCart, FaUser } from 'react-icons/fa';
 
 export const NavStyles = styled.nav`
   display: flex;

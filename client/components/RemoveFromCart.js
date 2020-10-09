@@ -1,10 +1,10 @@
-import React from "react";
-import styled, {css} from "styled-components";
-import {useMutation} from '@apollo/react-hooks';
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import { ifProp } from 'styled-tools';
 import Loading from './Loading';
-import {useCartDispatch} from '../src/cart-context';
-import {ifProp} from 'styled-tools';
+import { useCartDispatch } from '../src/cart-context';
 
 const REMOVE_FROM_CART = gql`
   mutation REMOVE_FROM_CART($cartId: String!, $cartItemId: String!) {
@@ -12,7 +12,7 @@ const REMOVE_FROM_CART = gql`
       message
     }
   }
-`
+`;
 
 const Button = styled.button`
   display: flex;
@@ -28,27 +28,33 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const RemoveFromCart = ({cartItemId, cartId, small, children}) => {
-
+const RemoveFromCart = ({
+  cartItemId, cartId, small, children,
+}) => {
   const { fetchCart } = useCartDispatch();
-  const [removeFromCart, {loading}] = useMutation(REMOVE_FROM_CART, {
+  const [removeFromCart, { loading }] = useMutation(REMOVE_FROM_CART, {
     onCompleted: () => {
       fetchCart();
-    }
+    },
   });
 
-  if(loading) return <Loading />
+  if (loading) return <Loading />;
 
-    return <Button small={small} onClick={() => {
-      removeFromCart({
-        variables: {
-          cartId,
-          cartItemId
-        }
-      })
-    }}>
+  return (
+    <Button
+      small={small}
+      onClick={() => {
+        removeFromCart({
+          variables: {
+            cartId,
+            cartItemId,
+          },
+        });
+      }}
+    >
       {children}
     </Button>
+  );
 };
 
 export default RemoveFromCart;

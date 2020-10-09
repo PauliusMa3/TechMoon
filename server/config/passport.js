@@ -1,7 +1,2 @@
 const passport = require('passport');
-const db = require('../models')
-
-
-
-
-
+const db = require('../models');
