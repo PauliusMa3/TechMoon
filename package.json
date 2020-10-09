@@ -1,0 +1,16 @@
+{
+  "name": "techmoon",
+  "version": "1.0.0",
+  "description": "Next js & Graphql ecommerce project",
+  "main": "index.js",
+  "scripts": {
+    "start": "(cd client && npm run dev)",
+    "dev": "concurrently \"cd server && npm run dev\" \"npm run start\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paulius Malinauskas",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
