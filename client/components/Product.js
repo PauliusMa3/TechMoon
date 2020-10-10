@@ -1,18 +1,14 @@
-import React, {
-  useState, useRef, useEffect, useLayoutEffect,
-} from 'react';
+import React from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import AddToCart from './AddToCartButton';
-import TabManager from './TabManager';
 import ProductDescription from './ProductDescription';
 import Reviews from './Reviews';
 import Loading from './Loading';
 import formatMoney from '../utils/formatMoney';
-import scrollToRef from './scrollToRef';
-import { TabManagerStyles } from './styles/TabManagerStyles';
+import {Tabs, Tab} from './Tabs/Tabs';
 
 const PRODUCT_QUERY = gql`
   query PRODUCT_QUERY($id: ID!) {
@@ -80,127 +76,61 @@ const ProductPriceValue = styled.span`
 const Product = () => {
   const router = useRouter();
 
-  const [activeTab, handleTab] = useState(0);
-
   const { data, loading, error } = useQuery(PRODUCT_QUERY, {
     variables: {
       id: router.query.id,
     },
   });
 
-  const productDescriptionRef = useRef(null);
-
   if (loading) return (<Loading />);
 
   if (!data) return null;
 
-  const TABS = [
-    { label: 'description', value: 0, content: ProductDescription },
-    { label: 'specifications', value: 1, content: ProductDescription },
-    { label: `reviews (${data && data.product.reviewsCount})`, value: 2, content: ProductDescription },
-  ];
-
-  const { label: activeLabel } = TABS[activeTab];
-
-  const scrollTo = () => {
-    if (productDescriptionRef && productDescriptionRef.current) {
-      window.scroll({
-        top: productDescriptionRef.current.offsetTop,
-        behavior: 'smooth',
-      });
-    }
-  };
-
-  // useLayoutEffect(() => {
-  //   // const rect = productDescriptionRef.current.getBoundingClientRect();
-  //   console.log("Input dimensions:", productDescriptionRef);
-  // }, [productDescriptionRef]);
-
-  // useLayoutEffect(() => {
-  //     window.scroll({
-  //       top: 150,
-  //       behavior: "smooth",
-  //     });
-  // }, [])
-
-  // useEffect(() => {
-  //   console.log('hey')
-  //       // window.scroll({
-  //       //   top: productDescriptionRef.current.offsetTop,
-  //       //   behavior: "smooth",
-  //       // });
-
-  // }, [activeTab])
-
-  console.log('productDescriptionRef', productDescriptionRef);
-
   return (
-    <ProductStyles>
-      <ProductHeroStyles>
-        <ProductImage>
-          <img
-            src={data.product.image}
-            className="product_image"
-            alt={data.product.name}
-          />
-        </ProductImage>
-        <ProductSideBar>
-          <ProductSideBarBlock>
-            <h1>{data.product.name}</h1>
-          </ProductSideBarBlock>
-          <ProductSideBarBlock>
-            <ProductPriceValue
-              onClick={(productDescriptionRef) => {
-                console.log('productDescriptionRef', productDescriptionRef);
-                scrollTo(productDescriptionRef);
-              }}
-            >
-              {formatMoney(data.product.price)}
-            </ProductPriceValue>
-          </ProductSideBarBlock>
-          <ProductSideBarBlock>
-            <AddToCart productId={data.product.id} />
-          </ProductSideBarBlock>
-        </ProductSideBar>
-      </ProductHeroStyles>
-      {/* <TabManager tabs={TABS} handleTab={handleTab} activeTab={activeTab} /> */}
-      <TabManagerStyles>
-        {TABS.map((tab) => (
-          <div
-            key={tab.value}
-            className={`tab ${activeTab === tab.value ? 'selected-tab' : ''}`}
-            onClick={() => {
-              handleTab(tab.value);
-              if (tab.label.startsWith('review')) {
-                router.push(`${router.asPath}#${tab.label}`);
-              } else {
-                typeof window === 'undefined'
-                  ? null
-                  : scrollToRef(productDescriptionRef);
-                // scrollTo(productDescriptionRef);
-              }
-            }}
-          >
-            {tab.label}
-          </div>
-        ))}
-      </TabManagerStyles>
-      )
-      <div className="tab-content">
-        {activeLabel.startsWith('reviews') && (
-        <Reviews
-          productId={data.product.id}
-          reviewsCount={data.product.reviewsCount}
-        />
-        )}
-      </div>
-      {!activeLabel.startsWith('reviews') && (
-      <ProductDescription
-        data={data.product.description}
-        ref={productDescriptionRef}
-      />
-      )}
-    </ProductStyles>
+      <ProductStyles>
+          <ProductHeroStyles>
+              <ProductImage>
+                  <img
+                      src={data.product.image}
+                      className="product_image"
+                      alt={data.product.name}
+                  />
+              </ProductImage>
+              <ProductSideBar>
+                  <ProductSideBarBlock>
+                      <h1>{data.product.name}</h1>
+                  </ProductSideBarBlock>
+                  <ProductSideBarBlock>
+                      <ProductPriceValue
+                          onClick={(productDescriptionRef) => {
+                              console.log(
+                                  'productDescriptionRef',
+                                  productDescriptionRef
+                              );
+                              scrollTo(productDescriptionRef);
+                          }}
+                      >
+                          {formatMoney(data.product.price)}
+                      </ProductPriceValue>
+                  </ProductSideBarBlock>
+                  <ProductSideBarBlock>
+                      <AddToCart productId={data.product.id} />
+                  </ProductSideBarBlock>
+              </ProductSideBar>
+          </ProductHeroStyles>
+
+          <Tabs>
+              <Tab label='description' tabName={'description'}>
+                  <ProductDescription data={data.product.description} />
+              </Tab>
+              <Tab label={'specifications'} tabName={'specifications'}>
+                  <ProductDescription data={data.product.description} />
+              </Tab>
+              <Tab label={'reviews'} tabName={`reviews (${data && data.product.reviewsCount})`}>
+                  <Reviews />
+              </Tab>
+          </Tabs>
+      </ProductStyles>
   );
 };
 

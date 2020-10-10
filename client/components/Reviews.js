@@ -12,6 +12,7 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 export const FETCH_REVIEWS_QUERY = gql`
@@ -92,8 +93,8 @@ const Reviews = ({ productId, reviewsCount }) => {
             </p>
           </ReviewStats>
           {isAuthenticated && <ReviewForm productId={productId} />}
-          {!loading
-              && data.reviews.map((review) => <ReviewCard review={review} />)}
+          {!loading &&
+              data && data.reviews.map((review) => <ReviewCard review={review} />)}
         </>
       )}
     </ReviewContainer>

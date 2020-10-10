@@ -92,7 +92,6 @@ const StyledPage = styled.div`
 
 const Page = (props) => {
   const { fetchCart } = useCartDispatch();
-  const { isAuthenticated } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -101,12 +100,9 @@ const Page = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyles />      
+      <GlobalStyles />
 
-
-
-
-              <StyledPage>
+      <StyledPage>
         {router.pathname.includes('checkout') ? (
           <CustomPage>{props.children}</CustomPage>
         ) : (

@@ -4,8 +4,6 @@
     "[javascript]": {
       "editor.formatOnSave": false
     },
-    //tell the ESLint plugin to run on save
-    "eslint.enable": true,
     "eslint.packageManager": "yarn",
     // Optional, if you have the prettier extension enabled
     // "prettier.disableLanguages": ["js"],
@@ -15,6 +13,7 @@
       "editor.wordWrapColumn": 80
     },
     "editor.codeActionsOnSave": {
+      "source.fixAll": true,
       "source.fixAll.eslint": true
     }
   }
