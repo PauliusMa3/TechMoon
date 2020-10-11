@@ -45,45 +45,46 @@ const Cart = () => {
     : 0;
 
   return (
-    <CartContainer isOpen={data.cartOpen}>
-      <header>
-        <h3>Your Shopping Cart</h3>
-        <strong onClick={closeCart}> &#10540;</strong>
-      </header>
-      <ul>
-        {cart
-          && cart.cartItems.map((cartItem) => (
-            <CartItem
-              key={cartItem.id}
-              cartItem={cartItem}
-              cartId={cart.id}
-            />
-          ))}
-      </ul>
-      <footer>
-        <Button
-          onClick={() => {
-            closeCart();
-            Router.push({
-              pathname: '/cart',
-            });
-          }}
-        >
-          {`View Your Bag (${cart ? cart.cartItems.length : ''})`}
-
-        </Button>
-        <Button
-          primary
-          checkout
-          onClick={() => {
-            Router.push('/checkout/delivery');
-          }}
-        >
-          <span>Checkout</span>
-          <TotalPrice>{totalCost > 0 && formatMoney(totalCost)}</TotalPrice>
-        </Button>
-      </footer>
-    </CartContainer>
+      <CartContainer isOpen={data.cartOpen}>
+          <header>
+              <h3>Your Shopping Cart</h3>
+              <strong onClick={closeCart}> &#10540;</strong>
+          </header>
+          <ul>
+              {cart &&
+                  cart.cartItems.map((cartItem) => (
+                      <CartItem
+                          key={cartItem.id}
+                          cartItem={cartItem}
+                          cartId={cart.id}
+                      />
+                  ))}
+          </ul>
+          <footer>
+              <Button
+                  onClick={() => {
+                      closeCart();
+                      Router.push({
+                          pathname: '/cart'
+                      });
+                  }}
+              >
+                  {`View Your Bag ${cart ? cart.cartItems.length : ''}`}
+              </Button>
+              <Button
+                  primary
+                  checkout
+                  onClick={() => {
+                      Router.push('/checkout');
+                  }}
+              >
+                  <span>Checkout</span>
+                  <TotalPrice>
+                      {totalCost > 0 && formatMoney(totalCost)}
+                  </TotalPrice>
+              </Button>
+          </footer>
+      </CartContainer>
   );
 };
 
