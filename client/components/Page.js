@@ -20,6 +20,7 @@ const theme = {
     red: '#d24d5f',
     yellow: '#ffbf00',
     errorRed: '#d04f72',
+    errorRed2: '#c54a51',
     green: '#89c038',
   },
   maxWidth: '1300px',

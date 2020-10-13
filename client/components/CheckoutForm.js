@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Router from 'next/router';
 import Loading from './Loading';
 import { useCartState } from '../src/cart-context';
-import { useForm } from '../src/form-context';
+import InputField from './Form/InputField';
 
 const CREATE_ORDER_MUTATION = gql`
   mutation CREATE_ORDER {
@@ -68,10 +68,6 @@ export default function CheckoutForm() {
     name: 'Paulius Malke',
     email: 'Paulius.Malinauskas@outlook.com',
   });
-
-  const { values } = useForm();
-
-  console.log('checkoutForm Values: ', values);
 
   const { cart } = useCartState();
 
@@ -138,27 +134,14 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
+    <div id="payment-form" onSubmit={handleSubmit}>
       <h3>Card Details</h3>
-      <Field
-        id="email"
-        type="email"
-        placeholder="Enter your e-mail"
-        required
-        value={billingDetails.email}
-        label="Email"
-        onChange={(e) => setBillingDetails({ ...billingDetails, email: e.target.value })}
+      <InputField 
+        type='name'
+        name='nameOnCard'
+        placeholder="Name on Card"
+        label="Name on Card"
       />
-      <Field
-        id="name"
-        type="name"
-        placeholder="Name"
-        required
-        value={billingDetails.name}
-        label="Name on the Card"
-        onChange={(e) => setBillingDetails({ ...billingDetails, name: e.target.value })}
-      />
-      {/* id, type, placeholder, required, autoComplete, value, onChange, */}
       <label>Card Details</label>
       <CardElement
         id="card-element"
@@ -180,6 +163,6 @@ export default function CheckoutForm() {
       {/* <p className={succeeded ? "result-message" : "result-message hidden"}>
         Payment succeeded
       </p> */}
-    </form>
+    </div>
   );
 }

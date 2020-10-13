@@ -29,17 +29,21 @@ export const Step = ({children, num}) => {
     )
 }
 
-export const Steps = ({children}) => {
-    const {currentStep, handleNextStep} = useStepper();
+export const Steps = ({children, numberOfSteps}) => {
+    const {currentStep, handleNextStep, handlePreviousStep} = useStepper();
 
-    const numberOfSteps = children.length;
     return (
         <div>
             {children}
             {currentStep < numberOfSteps && (
-                <div>
+                <>
                     <Button onClick={handleNextStep}>Continue</Button>
-                </div>
+                </>
+            )}
+            {currentStep !== 1 && (
+                <>
+                    <Button onClick={handlePreviousStep}>Back</Button>
+                </>
             )}
         </div>
     );

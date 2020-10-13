@@ -10,10 +10,14 @@ const Stepper = ({step, children}) => {
 
     const handleNextStep = () => {
         setCurrentStep(currentStep + 1);
-    };   
+    };
+    
+    const handlePreviousStep = () => {
+        setCurrentStep(currentStep - 1);
+    }
 
     return (
-        <StepperContext.Provider value={{currentStep, handleNextStep}}>
+        <StepperContext.Provider value={{currentStep, handleNextStep, handlePreviousStep}}>
             <>
                 {children}
             </>

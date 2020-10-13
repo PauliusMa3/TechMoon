@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import { FaStore, FaTruck } from 'react-icons/fa';
 import { useAuth } from '../src/auth-context';
 import formatMoney from '../utils/formatMoney';
-import { useForm, FormContainer } from '../src/form-context';
+// import { useForm, FormContainer } from '../src/form-context';
+import InputField from './Form/InputField';
 
 const Container = styled.div`
   box-sizing: border-box;
   width: 700px;
 `;
 
-const Form = styled.form`
+const Form = styled.div`
   height: 100%;
   font-family: 'Robo-regular';
   h3 {
@@ -28,17 +29,6 @@ const Form = styled.form`
     position: absolute;
     width: 100%;
     width: 2px;
-  }
-
-  input:not([type='radio']) {
-    width: 100%;
-    border: 1px solid ${(props) => props.theme.colors.secondaryGrey};
-    border-radius: 5px;
-    padding: 0.8rem 0.5rem;
-
-    &:focus {
-      border-color: ${(props) => props.theme.colors.secondaryBlue};
-    }
   }
 
   fieldset {
@@ -162,73 +152,108 @@ const CheckoutUserDetails = ({
   handleNextStep,
 }) => {
   const { isAuthenticated, user } = useAuth();
-  console.log('isAuthenticated:', isAuthenticated);
-  console.log('user: ', user);
-
-  const [name, setName] = useState(isAuthenticated ? user.name : '');
-  const [lastName, setLastName] = useState(isAuthenticated ? user.name : '');
-  const [email, setEmail] = useState(isAuthenticated ? user.email : '');
-  const [phoneNumber, setPhoneNumber] = useState('');
-
-  const { setFields } = useForm();
+//   const { setFields } = useForm();
 
   return (
       <Container>
-          <Form
-          >
+          <Form>
               <FieldSet>
-                  <label htmlFor="name">
-                      Name:
-                      <input
-                          type="name"
-                          id="firstName"
-                          required
-                          name="name"
-                          placeholder="Enter your name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                      />
-                  </label>
-
-                  <label htmlFor="lname">
-                      Last Name
-                      <input
-                          type="text"
-                          id="lname"
-                          name="lastName"
-                          required
-                          placeholder="Enter your Last name"
-                          value={lastName}
-                          onChange={(e) => setLastName(e.target.value)}
-                      />
-                  </label>
-
-                  <label htmlFor="email">
-                      Email
-                      <input
-                          type="email"
-                          required
-                          id="email"
-                          name="email"
-                          placeholder="Enter your Email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                      />
-                  </label>
-
-                  <label htmlFor="phone">
-                      Telephone number
-                      <input
-                          required
-                          type="tel"
-                          name="phone"
-                          id="phone"
-                          placeholder="Enter your number"
-                          value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                      />
-                  </label>
+                  <InputField
+                      type="name"
+                      label="Name"
+                      name="name"
+                      placeholder="Enter your Name"
+                      required
+                  />
+                  <InputField
+                      type="text"
+                      label="Last Name"
+                      name="lastName"
+                      placeholder="Enter your Last Name"
+                  />
+                  <InputField
+                      type="email"
+                      label="Email"
+                      name="email"
+                      placeholder="Enter your Email"
+                  />
+                  <InputField
+                      type="tel"
+                      label="Phone Number"
+                      name="phone"
+                      placeholder="Enter your Phone"
+                  />
               </FieldSet>
+              <AddressArea>
+                  <FieldSet>
+                      <InputField
+                          type="text"
+                          label="Address"
+                          name="address"
+                          placeholder="Enter your Address"
+                      />
+                      <InputField
+                          type="text"
+                          label="Zip Code"
+                          name="zip"
+                          placeholder="Enter your Zip Code"
+                      />
+                  </FieldSet>
+              </AddressArea>
+          </Form>
+
+          {/* <FieldSet>
+                          <label htmlFor="address">
+                              Address:
+                              <input
+                                  type="address"
+                                  id="address"
+                                  required
+                                  name="address"
+                                  placeholder="Enter delivery address"
+                                  value={name}
+                                  onChange={(e) => setName(e.target.value)}
+                              />
+                          </label>
+                          <label htmlFor="zip">
+                              Zip Code:
+                              <input
+                                  id="zip"
+                                  name="zip"
+                                  type="text"
+                                  placeholder="Enter your zip codes"
+                                  pattern="[0-9]*"
+                                  required
+                                  value={name}
+                                  onChange={(e) => setName(e.target.value)}
+                              />
+                          </label>
+                          <label htmlFor="city">
+                              City:
+                              <input
+                                  id="city"
+                                  name="city"
+                                  type="text"
+                                  placeholder="Enter city"
+                                  required
+                                  value={name}
+                                  onChange={(e) => setName(e.target.value)}
+                              />
+                          </label>
+                          <label htmlFor="country">
+                              City:
+                              <input
+                                  id="country"
+                                  name="country"
+                                  type="country"
+                                  placeholder="Enter Country"
+                                  required
+                                  value={name}
+                                  onChange={(e) => setName(e.target.value)}
+                              />
+                          </label>
+                      </FieldSet>
+
               <hr />
               <FieldSet>
                   <Checkbox>
@@ -318,7 +343,7 @@ const CheckoutUserDetails = ({
                   </AddressArea>
               )}
               <hr />
-          </Form>
+          </Form> */}
       </Container>
   );
 };
