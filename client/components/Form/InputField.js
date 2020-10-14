@@ -41,7 +41,7 @@ const InputField = ({label, ...props}) => {
   const [field, meta] = useField(props);
 
   return (
-      <InputFieldStyles error={meta.error}>
+      <InputFieldStyles error={meta.error && meta.touched}>
           <label htmlFor={props.id || props.name}>
               {label}
               <input className="text-input" {...field} {...props} />

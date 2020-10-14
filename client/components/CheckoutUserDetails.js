@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import styled, {css} from 'styled-components';
 import { FaStore, FaTruck } from 'react-icons/fa';
-import { useAuth } from '../src/auth-context';
-import formatMoney from '../utils/formatMoney';
-// import { useForm, FormContainer } from '../src/form-context';
 import InputField from './Form/InputField';
+import RadioButtons from './Form/RadioGroup';
+import {ifProp} from 'styled-tools';
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -64,79 +63,20 @@ const Form = styled.div`
 `;
 
 const AddressArea = styled.div`
-  margin-top: 2rem;
-`
+    margin-top: 2rem;
+    transition: all 200ms linear;
 
-const Checkbox = styled.div`
-  display: flex;
-  align-items: center;
-  border: 1px solid ${(props) => props.theme.colors.lightGrey};
-  /* padding: 1rem 1rem; */
-
-  label {
-    padding: 18px 24px 18px 58px;
-    display: flex;
-    align-items: center;
-    /* justify-content: space-between; */
-    margin: 0;
-    position: relative;
-    cursor: pointer;
-    height: 100%;
-    width: 100%;
-    color: ${(props) => props.theme.colors.black};
-  }
-
-  input[type='radio'] {
-    opacity: 0;
-    position: absolute;
-    width: 0;
-    height: 0;
-  }
-
-  label::before {
-    content: '';
-    display: flex;
-    position: absolute;
-
-    height: 24px;
-    width: 24px;
-    left: 16px;
-    border-radius: 50%;
-    margin-right: 2rem;
-
-    border: 1px solid;
-  }
-
-  label::after {
-    content: '';
-    display: flex;
-    left: 19px;
-    height: 18px;
-    width: 18px;
-    position: absolute;
-    border-radius: 50%;
-    background-color: ${(props) => props.theme.colors.green};
-  }
-
-  input[type='radio'] + label::after {
-    content: none;
-  }
-
-  input[type='radio']:checked + label::before {
-    content: '';
-    border-color: ${(props) => props.theme.colors.green};
-  }
-
-  input[type='radio']:checked + label::after {
-    content: '';
-  }
-`;
-
-const StyledIcon = styled(({ component, ...props }) => React.cloneElement(component, props))`
-  height: 44px;
-  width: 44px;
-  margin-right: 1rem;
-  color: ${(props) => props.theme.colors.black};
+    ${ifProp(
+        'isOpen',
+        css`
+            transform: translateY(0%);
+            opacity: 1;
+        `,
+        css`
+            transform: translateY(-50%);
+            opacity: 0;
+        `
+    )}
 `;
 
 const FieldSet = styled.div`
@@ -146,204 +86,83 @@ const FieldSet = styled.div`
 `;
 
 const CheckoutUserDetails = ({
-  deliveryOptions,
-  deliveryOption,
-  setDeliveryOption,
-  handleNextStep,
+  currentOption
 }) => {
-  const { isAuthenticated, user } = useAuth();
-//   const { setFields } = useForm();
+
+const deliveryOptions = [
+    {
+        label: 'Collect at the Store',
+        optionName: 'store-pickup',
+        value: 0,
+        icon: <FaStore size={40} />
+    },
+
+    {
+        label: 'Home Delivery',
+        optionName: 'home-delivery',
+        value: 599,
+        icon: <FaTruck size={40} />
+    }
+];
 
   return (
       <Container>
           <Form>
-              <FieldSet>
-                  <InputField
-                      type="name"
-                      label="Name"
-                      name="name"
-                      placeholder="Enter your Name"
-                      required
-                  />
-                  <InputField
-                      type="text"
-                      label="Last Name"
-                      name="lastName"
-                      placeholder="Enter your Last Name"
-                  />
-                  <InputField
-                      type="email"
-                      label="Email"
-                      name="email"
-                      placeholder="Enter your Email"
-                  />
-                  <InputField
-                      type="tel"
-                      label="Phone Number"
-                      name="phone"
-                      placeholder="Enter your Phone"
-                  />
-              </FieldSet>
-              <AddressArea>
+              <>
+                  <h3>Contact Information</h3>
                   <FieldSet>
                       <InputField
-                          type="text"
-                          label="Address"
-                          name="address"
-                          placeholder="Enter your Address"
+                          type="name"
+                          label="Name"
+                          name="name"
+                          placeholder="Enter your Name"
+                          required
                       />
                       <InputField
                           type="text"
-                          label="Zip Code"
-                          name="zip"
-                          placeholder="Enter your Zip Code"
+                          label="Last Name"
+                          name="lastName"
+                          placeholder="Enter your Last Name"
+                      />
+                      <InputField
+                          type="email"
+                          label="Email"
+                          name="email"
+                          placeholder="Enter your Email"
+                      />
+                      <InputField
+                          type="tel"
+                          label="Phone Number"
+                          name="phone"
+                          placeholder="Enter your Phone"
                       />
                   </FieldSet>
-              </AddressArea>
-          </Form>
-
-          {/* <FieldSet>
-                          <label htmlFor="address">
-                              Address:
-                              <input
-                                  type="address"
-                                  id="address"
-                                  required
-                                  name="address"
-                                  placeholder="Enter delivery address"
-                                  value={name}
-                                  onChange={(e) => setName(e.target.value)}
-                              />
-                          </label>
-                          <label htmlFor="zip">
-                              Zip Code:
-                              <input
-                                  id="zip"
-                                  name="zip"
-                                  type="text"
-                                  placeholder="Enter your zip codes"
-                                  pattern="[0-9]*"
-                                  required
-                                  value={name}
-                                  onChange={(e) => setName(e.target.value)}
-                              />
-                          </label>
-                          <label htmlFor="city">
-                              City:
-                              <input
-                                  id="city"
-                                  name="city"
-                                  type="text"
-                                  placeholder="Enter city"
-                                  required
-                                  value={name}
-                                  onChange={(e) => setName(e.target.value)}
-                              />
-                          </label>
-                          <label htmlFor="country">
-                              City:
-                              <input
-                                  id="country"
-                                  name="country"
-                                  type="country"
-                                  placeholder="Enter Country"
-                                  required
-                                  value={name}
-                                  onChange={(e) => setName(e.target.value)}
-                              />
-                          </label>
-                      </FieldSet>
-
+              </>
               <hr />
-              <FieldSet>
-                  <Checkbox>
-                      <input
-                          type="radio"
-                          name="delivery-1"
-                          id="delivery-1"
-                          value={formatMoney(deliveryOptions[0].value)}
-                          checked={
-                              deliveryOption.label === 'Collect at the Store'
-                          }
-                          onChange={() => setDeliveryOption(deliveryOptions[0])}
-                      />
-                      <label htmlFor="delivery-1">
-                          <StyledIcon component={deliveryOptions[0].icon} />
-                          Collect at the store
-                      </label>
-                  </Checkbox>
-                  <Checkbox>
-                      <input
-                          type="radio"
-                          name="delivery-2"
-                          id="delivery-2"
-                          value={formatMoney(deliveryOptions[1].value)}
-                          checked={deliveryOption.label === 'Home Delivery'}
-                          onChange={() => setDeliveryOption(deliveryOptions[1])}
-                      />
-                      <label htmlFor="delivery-2">
-                          <StyledIcon component={deliveryOptions[1].icon} />
-                          Home Delivery
-                      </label>
-                  </Checkbox>
-              </FieldSet>
-              {deliveryOption.label === 'Home Delivery' && (
-                  <AddressArea>
+              <RadioButtons
+                  name="radioOption"
+                  options={deliveryOptions}
+                  title={'Delivery Method'}
+              />
+              <hr />
+                  <AddressArea isOpen={currentOption !== 'store-pickup'}>
+                      <h3>Delivery Address</h3>
                       <FieldSet>
-                          <label htmlFor="address">
-                              Address:
-                              <input
-                                  type="address"
-                                  id="address"
-                                  required
-                                  name="address"
-                                  placeholder="Enter delivery address"
-                                  value={name}
-                                  onChange={(e) => setName(e.target.value)}
-                              />
-                          </label>
-                          <label htmlFor="zip">
-                              Zip Code:
-                              <input
-                                  id="zip"
-                                  name="zip"
-                                  type="text"
-                                  placeholder="Enter your zip codes"
-                                  pattern="[0-9]*"
-                                  required
-                                  value={name}
-                                  onChange={(e) => setName(e.target.value)}
-                              />
-                          </label>
-                          <label htmlFor="city">
-                              City:
-                              <input
-                                  id="city"
-                                  name="city"
-                                  type="text"
-                                  placeholder="Enter city"
-                                  required
-                                  value={name}
-                                  onChange={(e) => setName(e.target.value)}
-                              />
-                          </label>
-                          <label htmlFor="country">
-                              City:
-                              <input
-                                  id="country"
-                                  name="country"
-                                  type="country"
-                                  placeholder="Enter Country"
-                                  required
-                                  value={name}
-                                  onChange={(e) => setName(e.target.value)}
-                              />
-                          </label>
+                          <InputField
+                              type="text"
+                              label="Address"
+                              name="address"
+                              placeholder="Enter your Address"
+                          />
+                          <InputField
+                              type="text"
+                              label="Zip Code"
+                              name="zip"
+                              placeholder="Enter your Zip Code"
+                          />
                       </FieldSet>
                   </AddressArea>
-              )}
-              <hr />
-          </Form> */}
+          </Form>
       </Container>
   );
 };

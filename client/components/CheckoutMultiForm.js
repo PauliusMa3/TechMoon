@@ -4,21 +4,11 @@ import StoreName from './StoreName';
 import Checkout from './Checkout';
 import Stepper from './MultiStepForm/Stepper';
 import {Formik, Form} from 'formik';
-import {useAuth} from '../src/auth-context';
 import * as Yup from 'yup';
 
-const CheckoutMultiForm = ({
-    deliveryOptions,
-    deliveryOption,
-    setDeliveryOption
-}) =>  {
+const CheckoutMultiForm = () =>  {
 
-    const {isAuthenticated, user} = useAuth();
-    console.log('user: ', user);
 
-    const initialName =  isAuthenticated ?  `${user.name}` : '';
-
-    console.log('initialName: ', initialName);
     return (
         <Stepper step={1}>
             <header>
@@ -36,24 +26,38 @@ const CheckoutMultiForm = ({
                         email: '',
                         phone: '',
                         address: '',
-                        zip: ''
+                        zip: '',
+                        radioOption: 'store-pickup'
                     }}
                     validationSchema={Yup.object({
-                        name: Yup.string().required('This field is required')
+                        name: Yup.string().required('Name field is required'),
+                        lastName: Yup.string().required(
+                            'Last Name field is required'
+                        ),
+                        email: Yup.string()
+                            .email('Email is invalid')
+                            .required('Email field is required'),
+                        zip: Yup.string()
+                            .required('Zip code field is required')
+                            .matches(/^[0-9]+$/, 'Must be only digits'),
+                        phone: Yup.string().required('Phone field is required'),
+                        address: Yup.string().required('Address field is required')
                     })}
                 >
-                    <Form>
-                        <Stepper.Step num={1}>
-                            <CheckoutUserDetails
-                                deliveryOption={deliveryOption}
-                                deliveryOptions={deliveryOptions}
-                                setDeliveryOption={setDeliveryOption}
-                            />
-                        </Stepper.Step>
-                        <Stepper.Step num={2}>
-                            <Checkout />
-                        </Stepper.Step>
-                    </Form>
+                    {({values}) => {
+                        return (
+                            <Form>
+                                <Stepper.Step num={1}>
+                                    <CheckoutUserDetails
+                                        currentOption={values.radioOption}
+                                    />
+                                </Stepper.Step>
+                                <Stepper.Step num={2}>
+                                    <Checkout />
+                                </Stepper.Step>
+                            </Form>
+                        );
+                    }}
                 </Formik>
             </Stepper.Steps>
         </Stepper>
