@@ -17,6 +17,7 @@ const theme = {
     tertiaryBlue: '#0763e5',
     primaryBlue: '#0993f3',
     secondaryBlue: '#00719c',
+    specialBlue: '#00b4db',
     red: '#d24d5f',
     yellow: '#ffbf00',
     errorRed: '#d04f72',

@@ -85,9 +85,7 @@ const FieldSet = styled.div`
   grid-gap: 15px;
 `;
 
-const CheckoutUserDetails = ({
-  currentOption
-}) => {
+const CheckoutUserDetails = ({currentOption}) => {
 
 const deliveryOptions = [
     {
@@ -116,7 +114,6 @@ const deliveryOptions = [
                           label="Name"
                           name="name"
                           placeholder="Enter your Name"
-                          required
                       />
                       <InputField
                           type="text"

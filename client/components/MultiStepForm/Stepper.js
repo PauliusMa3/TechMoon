@@ -1,5 +1,4 @@
 import React, {useState, useContext} from 'react';
-import styled from 'styled-components';
 import {Steps, Step} from './Steps';
 import {Progress, Stage} from './Progress';
 
@@ -18,9 +17,7 @@ const Stepper = ({step, children}) => {
 
     return (
         <StepperContext.Provider value={{currentStep, handleNextStep, handlePreviousStep}}>
-            <>
-                {children}
-            </>
+             {children}
         </StepperContext.Provider>
     )
 
