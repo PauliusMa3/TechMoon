@@ -2,11 +2,14 @@ const { orderService, cartService } = require('../services');
 const { requiresLogin } = require('./utils');
 
 const OrderMutations = {
-  createOrder: (parent, args, { req }, info) => orderService.createOrder({ userId: req.user.id })
+  createOrder: async(parent, args, { req }, info) =>  {
 
-    // return {
-    //   clientSecret: paymentSecret.clientSecret,
-    // };
+    const paymentSecret = await orderService.createOrder({ req });
+    return {
+      clientSecret: paymentSecret.clientSecret,
+    };
+  }
+
 };
 
 const OrderQueries = {

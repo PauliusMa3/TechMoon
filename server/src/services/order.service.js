@@ -4,6 +4,7 @@ const db = require('../../models');
 const { fetchCart } = require('./cart.service');
 
 const createOrder = async ({ req }) => {
+  const userId = req.user.id;
   try {
     const userCart = await fetchCart({ req });
     const totalPrice = userCart.cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -52,8 +53,6 @@ const createOrder = async ({ req }) => {
     console.log('Failed to create Stripe Payment: ', e.message);
   }
 };
-
-const createOrderPayment = () => 
 
 module.exports = {
   createOrder,

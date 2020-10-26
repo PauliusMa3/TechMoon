@@ -142,23 +142,35 @@ const deliveryOptions = [
                   title={'Delivery Method'}
               />
               <hr />
-                  <AddressArea isOpen={currentOption !== 'store-pickup'}>
-                      <h3>Delivery Address</h3>
-                      <FieldSet>
-                          <InputField
-                              type="text"
-                              label="Address"
-                              name="address"
-                              placeholder="Enter your Address"
-                          />
-                          <InputField
-                              type="text"
-                              label="Zip Code"
-                              name="zip"
-                              placeholder="Enter your Zip Code"
-                          />
-                      </FieldSet>
-                  </AddressArea>
+              <AddressArea isOpen={currentOption !== 'store-pickup'}>
+                  <h3>Delivery Address</h3>
+                  <FieldSet>
+                      <InputField
+                          type="text"
+                          label="Address"
+                          name="address"
+                          placeholder="Enter your Address"
+                      />
+                      <InputField
+                          type="text"
+                          label="Zip Code"
+                          name="zip"
+                          placeholder="Enter your Zip Code"
+                      />
+                      <InputField
+                          type="text"
+                          label="City"
+                          name="city"
+                          placeholder="Enter City"
+                      />{' '}
+                      <InputField
+                          type="text"
+                          label="Country"
+                          name="country"
+                          placeholder="Enter your Country"
+                      />
+                  </FieldSet>
+              </AddressArea>
           </Form>
       </Container>
   );

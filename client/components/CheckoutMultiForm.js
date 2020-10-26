@@ -71,38 +71,49 @@ const CheckoutMultiForm = () =>  {
             </Stepper.Progress>
             <Stepper.Steps
                 numberOfSteps={numberOfCheckoutSteps}
-                renderItems={(currentStep, handleNextStep, handlePreviousStep) => {
+                renderItems={(
+                    currentStep,
+                    handleNextStep,
+                    handlePreviousStep
+                ) => {
                     return (
                         <Formik
                             initialValues={{
-                                name: '',
-                                lastName: '',
-                                email: '',
-                                phone: '',
+                                name: 'Paulius',
+                                lastName: 'James',
+                                email: 'Paulius@gmail.com',
+                                phone: '868430653',
                                 address: '',
                                 zip: '',
-                                radioOption: 'store-pickup'
+                                radioOption: 'store-pickup',
+                                nameOnCard: 'Paulius james'
                             }}
-                            validationSchema={Yup.object({
-                                name: Yup.string().required(
-                                    'Name field is required'
-                                ),
-                                lastName: Yup.string().required(
-                                    'Last Name field is required'
-                                ),
-                                email: Yup.string()
-                                    .email('Email is invalid')
-                                    .required('Email field is required'),
-                                zip: Yup.string()
-                                    // .required('Zip code field is required')
-                                    .matches(/^[0-9]+$/, 'Must be only digits'),
-                                phone: Yup.string().required(
-                                    'Phone field is required'
-                                ),
-                                address: Yup.string()
-                            })}
+                            // validationSchema={Yup.object({
+                            //     name: Yup.string().required(
+                            //         'Name field is required'
+                            //     ),
+                            //     lastName: Yup.string().required(
+                            //         'Last Name field is required'
+                            //     ),
+                            //     email: Yup.string()
+                            //         .email('Email is invalid')
+                            //         .required('Email field is required'),
+                            //     // zip: Yup.string()
+                            //         // .required('Zip code field is required')
+                            //         // .matches(/^[0-9]+$/, 'Must be only digits'),
+                            //     phone: Yup.string().required(
+                            //         'Phone field is required'
+                            //     ),
+                            //     nameOnCard: Yup.string().required('Name on the Card Required')
+                            // })}
                             onSubmit={(values, actions) => {
-                                return handleSubmit(values, actions, currentStep, handleNextStep)
+                                console.log('onSubmit handler call');
+                                handleSubmit(
+                                    values,
+                                    actions,
+                                    currentStep,
+                                    handleNextStep
+                                );
                             }}
                         >
                             {({ values }) => {
@@ -116,7 +127,7 @@ const CheckoutMultiForm = () =>  {
                                             />
                                         </Stepper.Step>
                                         <Stepper.Step num={2}>
-                                            <Checkout />
+                                            <Checkout values={values} />
                                         </Stepper.Step>
 
                                         {currentStep !== 1 && (
@@ -131,10 +142,7 @@ const CheckoutMultiForm = () =>  {
                                         {currentStep <
                                             numberOfCheckoutSteps && (
                                             <Button primary type="submit">
-                                                {currentStep <
-                                                numberOfCheckoutSteps
-                                                    ? 'Next'
-                                                    : 'Submit'}
+                                                Next
                                             </Button>
                                         )}
                                     </Form>

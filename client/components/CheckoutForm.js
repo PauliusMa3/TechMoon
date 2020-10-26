@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Router from 'next/router';
-import Loading from './Loading';
 import { useCartState } from '../src/cart-context';
 import InputField from './Form/InputField';
 
@@ -24,50 +23,18 @@ const DELETE_CART_MUTATION = gql`
   }
 `;
 
-const FieldStyles = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1.5rem;
-  label {
-    margin-bottom: 0.5rem;
-  }
-`;
+const PaymentFormWrapper = styled.div`
+  width: 100%;
+`
 
-const Field = ({
-  label,
-  id,
-  type,
-  placeholder,
-  required,
-  autoComplete,
-  value,
-  onChange,
-}) => (
-  <FieldStyles>
-    <label htmlFor={id}>{label}</label>
-    <input
-      id={id}
-      type={type}
-      placeholder={placeholder}
-      required={required}
-      autoComplete={autoComplete}
-      value={value}
-      onChange={onChange}
-    />
-  </FieldStyles>
-);
-export default function CheckoutForm() {
+
+export default function CheckoutForm({values}) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [clientSecret, setClientSecret] = useState('');
   const stripe = useStripe();
   const elements = useElements();
-  const [billingDetails, setBillingDetails] = useState({
-    name: 'Paulius Malke',
-    email: 'Paulius.Malinauskas@outlook.com',
-  });
 
   const { cart } = useCartState();
 
@@ -75,18 +42,19 @@ export default function CheckoutForm() {
   const client = useApolloClient();
 
   const fetchClientToken = async () => {
-    const res = await client.mutate({
-      mutation: CREATE_ORDER_MUTATION,
-    });
+    try {
+      const res = await client.mutate({
+          mutation: CREATE_ORDER_MUTATION
+      });
 
-    if (res) {
-      setClientSecret(res.data.createOrder.clientSecret);
+      return res;
+    } catch(e) {
+      console.error(e.message);
+      return {
+        failed: true
+      }
     }
   };
-
-  useEffect(() => {
-    fetchClientToken();
-  }, []);
 
   const cardStyle = {
     style: {
@@ -110,11 +78,30 @@ export default function CheckoutForm() {
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     setProcessing(true);
+    const {address, city, country, zip,email, name, phone} = values;
+    const orderResult =  await fetchClientToken();
 
-    const payload = await stripe.confirmCardPayment(clientSecret, {
+    if(orderResult.failed) {
+      setError('Failed to fulfil your order. Please try again');
+      return;
+    }
+
+    const {data: {createOrder: clientSecret}} = orderResult;
+
+    const payload = await stripe.confirmCardPayment(clientSecret.clientSecret, {
       payment_method: {
         card: elements.getElement(CardElement),
-        billing_details: billingDetails,
+        billing_details: {
+          address: {
+            city: city ? city : null,
+            country: country ? country : null,
+            line1: address ? address : null,
+            postal_code: zip ? zip : null,
+          },
+          email,
+          name,
+          phone
+        },
       },
     });
     if (payload.error) {
@@ -134,35 +121,41 @@ export default function CheckoutForm() {
   };
 
   return (
-    <div id="payment-form" onSubmit={handleSubmit}>
-      <h3>Card Details</h3>
-      <InputField 
-        type='name'
-        name='nameOnCard'
-        placeholder="Name on Card"
-        label="Name on Card"
-      />
-      <label>Card Details</label>
-      <CardElement
-        id="card-element"
-        options={cardStyle}
-        onChange={handleChange}
-      />
-      <button disabled={processing || disabled || succeeded} id="submit">
-        <span id="button-text">
-          {processing ? <div className="spinner" id="spinner" /> : 'Pay'}
-        </span>
-      </button>
-      {/* Show any error that happens when processing the payment */}
-      {error && (
-        <div className="card-error" role="alert">
-          {error}
-        </div>
-      )}
-      {/* Show a success message upon completion */}
-      {/* <p className={succeeded ? "result-message" : "result-message hidden"}>
+      <PaymentFormWrapper onSubmit={handleSubmit}>
+          <h3>Card Details</h3>
+          <InputField
+              type="name"
+              name="nameOnCard"
+              placeholder="Name on Card"
+              label="Name on Card"
+          />
+          <label>Card Details</label>
+          <CardElement
+              id="card-element"
+              options={cardStyle}
+              onChange={handleChange}
+          />
+          <button disabled={processing || disabled || succeeded} id="submit" onClick={(e) => {
+            handleSubmit(e);
+          }}>
+              <span id="button-text">
+                  {processing ? (
+                      <div className="spinner" id="spinner" />
+                  ) : (
+                      'Pay'
+                  )}
+              </span>
+          </button>
+          {/* Show any error that happens when processing the payment */}
+          {error && (
+              <div className="card-error" role="alert">
+                  {error}
+              </div>
+          )}
+          {/* Show a success message upon completion */}
+          {/* <p className={succeeded ? "result-message" : "result-message hidden"}>
         Payment succeeded
       </p> */}
-    </div>
+      </PaymentFormWrapper>
   );
 }

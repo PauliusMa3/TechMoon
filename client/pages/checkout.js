@@ -12,6 +12,7 @@ const CheckoutPageStyles = styled.div`
     grid-template-columns: 1.5fr 1fr;
     min-height: 100vh;
     font-family: 'Robo-regular';
+    overflow-y: auto;
 `;
 
 const LeftSide = styled.div`
@@ -70,19 +71,19 @@ const SubTotal = styled.div`
 `;
 
 const CheckoutPage = () => {
-const deliveryOptions = [
-    {
-        label: 'Collect at the Store',
-        price: 0,
-        icon: <FaStore size={40} />
-    },
+    const deliveryOptions = [
+        {
+            label: 'Collect at the Store',
+            price: 0,
+            icon: <FaStore size={40} />
+        },
 
-    {
-        label: 'Home Delivery',
-        price: 599,
-        icon: <FaTruck size={40} />
-    }
-];
+        {
+            label: 'Home Delivery',
+            price: 599,
+            icon: <FaTruck size={40} />
+        }
+    ];
 
     const [deliveryOption, setDeliveryOption] = useState(deliveryOptions[0]);
 

@@ -10,6 +10,7 @@ export const CheckoutStyles = styled.div`
   overflow-y: scroll;
   width: 100%;
   overflow: hidden;
+  width: 500px;
   z-index: 9999;
   label {
     font-size: 0.7rem;
@@ -21,7 +22,7 @@ export const CheckoutStyles = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 35vw;
+    width: 500px;
     height: 100%;
     align-self: center;
     box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),

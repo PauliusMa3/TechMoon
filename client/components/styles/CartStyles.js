@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
-import { ifProp } from 'styled-tools';
+import { ifProp, prop } from 'styled-tools';
 
 export const Button = styled.button`
-  width: 100%;
+  width: ${prop(`width`, '100%')};
   cursor: pointer;
   justify-content: center;
   padding: 0.75rem 0;
@@ -10,40 +10,41 @@ export const Button = styled.button`
   border: none;
   text-transform: uppercase;
   font-size: 0.9rem;
+  
 
   ${ifProp(
-    'checkout',
-    css`
-      display: grid;
-      grid-template-columns: 1fr 200px;
-      align-items: center;
-    `,
-    css`
-      display: flex;
-    `,
+      'checkout',
+      css`
+          display: grid;
+          grid-template-columns: 1fr 200px;
+          align-items: center;
+      `,
+      css`
+          display: flex;
+      `
   )}
 
   ${ifProp(
-    'primary',
-    css`
-      background: linear-gradient(to right, #00b4db, #0083b0);
-      color: ${(props) => props.theme.colors.white};
+      'primary',
+      css`
+          background: linear-gradient(to right, #00b4db, #0083b0);
+          color: ${(props) => props.theme.colors.white};
 
-      &:hover {
-        opacity: 0.8;
-      }
-    `,
-    css`
-      background: white;
-      border: 2px solid ${(props) => props.theme.colors.black};
-      color: ${(props) => props.theme.colors.black};
+          &:hover {
+              opacity: 0.8;
+          }
+      `,
+      css`
+          background: white;
+          border: 2px solid ${(props) => props.theme.colors.black};
+          color: ${(props) => props.theme.colors.black};
 
-      &:hover {
-        background: ${(props) => props.theme.colors.black};
-        color: ${(props) => props.theme.colors.white};
-        opacity: 1;
-      }
-    `,
+          &:hover {
+              background: ${(props) => props.theme.colors.black};
+              color: ${(props) => props.theme.colors.white};
+              opacity: 1;
+          }
+      `
   )}
 
   /* transition: all 0.2s; */

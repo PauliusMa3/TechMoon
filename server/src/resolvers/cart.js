@@ -3,10 +3,7 @@ const { requiresLogin } = require('./utils');
 const { cartService } = require('../services');
 
 const CartQueries = {
-  cart: async (parent, args, { req }, info) => {
-    const result = cartService.fetchCart({ req });
-    return result;
-  },
+  cart: async (parent, args, { req }, info) => cartService.fetchCart({ req }),
 };
 
 const CartMutations = {

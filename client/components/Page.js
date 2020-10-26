@@ -8,24 +8,25 @@ import { useAuth } from '../src/auth-context';
 import Cart from './Cart';
 
 const theme = {
-  colors: {
-    primary: 'red',
-    lightGrey: '#F0F0F0',
-    secondaryGrey: '#bebebe',
-    white: '#FFFFFF',
-    black: '#151515',
-    tertiaryBlue: '#0763e5',
-    primaryBlue: '#0993f3',
-    secondaryBlue: '#00719c',
-    specialBlue: '#00b4db',
-    red: '#d24d5f',
-    yellow: '#ffbf00',
-    errorRed: '#d04f72',
-    errorRed2: '#c54a51',
-    green: '#89c038',
-  },
-  maxWidth: '1300px',
-  boxShadow: '0 6px 14px rgba(0,0,0,.1)',
+    colors: {
+        primary: 'red',
+        lightGrey: '#F0F0F0',
+        secondaryGrey: '#bebebe',
+        white: '#FFFFFF',
+        black: '#151515',
+        tertiaryBlue: '#0763e5',
+        primaryBlue: '#0993f3',
+        secondaryBlue: '#00719c',
+        specialBlue: '#00b4db',
+        red: '#d24d5f',
+        yellow: '#ffbf00',
+        errorRed: '#d04f72',
+        errorRed2: '#c54a51',
+        green: '#89c038',
+        successGreen: '#4BB543'
+    },
+    maxWidth: '1300px',
+    boxShadow: '0 6px 14px rgba(0,0,0,.1)'
 };
 
 const GlobalStyles = createGlobalStyle`
