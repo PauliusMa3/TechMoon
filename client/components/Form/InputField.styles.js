@@ -23,7 +23,7 @@ export const InputFieldStyles = styled.div`
 export const Label = styled.label`
     width: 100%;
     font-size: 0.8rem;
-    color: ${(props) => props.theme.colors.secondaryGrey};
+    color: ${(props) => props.theme.colors.black};
 
     &:focus {   
         border-color: ${(props) => props.theme.colors.secondaryBlue};

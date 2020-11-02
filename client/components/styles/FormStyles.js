@@ -37,7 +37,7 @@ export const FormStyles = styled.form`
     display: flex;
     width: 100%;
     color: ${(props) => props.theme.colors.white};
-    margin-top: 3rem;
+    margin-top: 1.5rem;
 
     cursor: pointer;
     justify-content: center;
@@ -64,7 +64,7 @@ export const FormStyles = styled.form`
 export const LinkToSignup = styled.div`
   margin-top: 1rem;
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 1rem;
   span {
     color: ${(props) => props.theme.colors.black};
   }
@@ -73,7 +73,6 @@ export const LinkToSignup = styled.div`
     color: ${(props) => props.theme.colors.secondaryBlue};
 
     &:hover {
-      /* color: #004661; */
       color: black;
     }
   }

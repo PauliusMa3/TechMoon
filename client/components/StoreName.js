@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import Link from 'next/link';
+import React from 'react'
 
-const StoreNameStyles = styled.h1`
+const StoreNameStyles = styled.div`
   display: inline-block;
   background: #00719c;
   position: relative;

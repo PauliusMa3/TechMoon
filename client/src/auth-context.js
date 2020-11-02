@@ -2,10 +2,47 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import {useMutation} from '@apollo/react-hooks';
+import gql  from 'graphql-tag';
+
+const SIGNUP_MUTATION = gql`
+    mutation SIGNUP_MUTATION(
+        $email: String!
+        $name: String!
+        $password: String!
+    ) {
+        signup(email: $email, name: $name, password: $password) {
+          userId
+          email
+          name
+        }
+    }
+`;
 
 const AuthContext = React.createContext();
 function AuthProvider({ children }) {
   const Router = useRouter();
+
+  const [signup] = useMutation(SIGNUP_MUTATION, {
+      onError: (signupError) => {
+          const hasEmailError = signupError.graphQLErrors.find((item) => item.message.includes(
+                  'This email address is not available' )
+          );
+          setState({
+              status: 'error',
+              error: hasEmailError.message || signupError.message,
+              user: null
+          });
+      },
+      onCompleted: (data) => {
+        setState({
+            status: 'success',
+            error: null,
+            user: data.signup
+        });
+        Router.push('/');
+      }
+  });
 
   const [state, setState] = useState({
     status: null,
@@ -84,6 +121,17 @@ function AuthProvider({ children }) {
     }
   };
 
+  const register = ({email,name, password}) => {
+    setState({ status: 'pending', user: null, error: null });
+    signup({
+        variables: {
+            email,
+            name,
+            password
+        }
+    });
+  }
+
   const logout = async () => {
     await axios.get('http://localhost:8888/logout', {
       withCredentials: true,
@@ -95,31 +143,32 @@ function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, cleanAuthError }}>
+    <AuthContext.Provider value={{ ...state, login, logout, cleanAuthError, register }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
 const useAuth = () => {
-  const context = React.useContext(AuthContext);
+    const context = React.useContext(AuthContext);
 
-  if (context === undefined) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
+    if (context === undefined) {
+        throw new Error('useAuth must be used within AuthProvider');
+    }
 
-  const isSuccess = context.status === 'success';
-  const isLoading = context.status === 'pending';
-  const isError = context.status === 'error';
-  const isAuthenticated = context.user && isSuccess;
+    const isSuccess = context.status === 'success';
+    const isLoading = context.status === 'pending';
+    const isError = context.status === 'error';
+    const isAuthenticated = context.user && isSuccess;
 
-  return {
-    ...context,
-    isSuccess,
-    isLoading,
-    isError,
-    isAuthenticated,
-  };
+    return {
+        ...context,
+        isSuccess,
+        isLoading,
+        isError,
+        isAuthenticated
+    };
 };
+
 
 export { AuthProvider, useAuth };

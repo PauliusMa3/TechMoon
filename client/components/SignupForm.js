@@ -1,132 +1,115 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
-import {
-  FormStyles, UserIcon, LockIcon, InputField,
-} from './styles/FormStyles';
+  import React from 'react';
+  import Link from 'next/link';
+  import { Form, Formik } from 'formik';
+  import * as Yup from 'yup';
+  import {
+      FormStyles,
+      UserIcon,
+      LockIcon,
+      LinkToSignup
+  } from './styles/FormStyles';
+  import { useAuth } from '../src/auth-context';
+  import InputField from './Form/InputField';
+  import ErrorBanner from '../components/ErrorBanner';
 
-const SIGNUP_MUTATION = gql`
-    mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-        signup(email: $email, name:$name password: $password ){
-          email
-        }
-    }
-`;
 
-const ErrorMessage = styled.span`
-  color: red;
-  display: block;
-  margin-top: 0.3rem;
-  font-size: 0.8rem;
-`;
 
-const Form = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errors, setErrors] = useState({});
+  const SignUpForm = () => {
+      const { register, isLoading, error: authError } = useAuth();
 
-  const [signup, { loading, data }] = useMutation(SIGNUP_MUTATION);
-
-  const submitForm = async (e) => {
-    e.preventDefault();
-
-    if (errors.confirmPassword) {
-      setErrors({ confirmPassword: false });
-    }
-
-    await signup({
-      variables: {
-        email,
-        name,
-        password,
-      },
-    });
-
-    setEmail('');
-    setPassword('');
-    setName('');
-    setConfirmPassword('');
+      return (
+          <Formik
+              initialValues={{
+                  email: 'paulius1@gmail.com',
+                  name: 'paulius',
+                  password: 'Password1',
+                  confirmPassword: 'Password1'
+              }}
+              validationSchema={Yup.object({
+                  email: Yup.string()
+                      .email('Email is invalid')
+                      .required('Email is required'),
+                  name: Yup.string().required('Name is required'),
+                  password: Yup.string()
+                      .matches(
+                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+                          'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number'
+                      )
+                      .required('Password is required'),
+                  confirmPassword: Yup.string().test(
+                      'match',
+                      'Passwords should match',
+                      function (passwordConfirmation) {
+                          console.log(
+                              'this.parent.password: ',
+                              this.parent.password
+                          );
+                          return passwordConfirmation === this.parent.password;
+                      }
+                  )
+              })}
+              onSubmit={(values) => {
+                  const { email, password, name } = values;
+                  register({
+                      email,
+                      password,
+                      name
+                  });
+              }}
+          >
+              <Form>
+                  <FormStyles>
+                      {authError && <ErrorBanner authError={authError} />}
+                      <h2>Create an Account</h2>
+                      <fieldset disabled={isLoading}>
+                          <InputField
+                              type="email"
+                              label="Email"
+                              name="email"
+                              placeholder="Enter your email"
+                              iconInputField
+                              icon={() => <UserIcon />}
+                          />
+                          <InputField
+                              type="name"
+                              label="Name"
+                              name="name"
+                              placeholder="Enter your name"
+                              iconInputField
+                              icon={() => <UserIcon />}
+                          />
+                          <InputField
+                              type="password"
+                              label="Password"
+                              name="password"
+                              placeholder="Enter your password"
+                              iconInputField
+                              icon={() => <LockIcon />}
+                          />
+                          <InputField
+                              type="password"
+                              label="Confirm Password"
+                              name="confirmPassword"
+                              placeholder="Confirm your password"
+                              iconInputField
+                              icon={() => <LockIcon />}
+                          />
+                          <LinkToSignup>
+                              <span>Already have an account? </span>
+                              <Link href="/signin">
+                                  <a>Log in</a>
+                              </Link>
+                          </LinkToSignup>
+                          <button type="submit">
+                              {isLoading ? 'loading...' : 'register'}
+                          </button>
+                      </fieldset>
+                  </FormStyles>
+              </Form>
+          </Formik>
+      );
   };
 
-  return (
-    <FormStyles
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (confirmPassword === password) {
-          setErrors({ confirmPassword: false });
-          submitForm(e);
-          return;
-        }
+  export default SignUpForm;
 
-        setErrors({ confirmPassword: true });
-      }}
-      method="post"
-    >
-      <h2>Create an Account</h2>
-      <fieldset disabled={loading}>
-        <label htmlFor="email">
-          Email:
-          <InputField>
-            <UserIcon />
-            <input
-              type="email"
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              placeholder="Type Your Email"
-            />
-          </InputField>
-        </label>
-        <label htmlFor="name">
-          Name:
-          <InputField>
-            <UserIcon />
-            <input
-              type="text"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              placeholder="Type Your Name"
-            />
-          </InputField>
-        </label>
-        <label htmlFor="password">
-          Password:
-          <InputField>
-            <LockIcon />
-            <input
-              type="password"
-              name="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              placeholder="Type your Password"
-            />
-          </InputField>
-        </label>
 
-        <label htmlFor="confirmPassword">
-          Password:
-          <InputField error={errors.confirmPassword}>
-            <LockIcon />
-            <input
-              type="password"
-              name="confirmPassword"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-              placeholder="Confirm your Password"
-            />
-          </InputField>
-          {errors.confirmPassword && (
-          <ErrorMessage>Passwords should match</ErrorMessage>
-          )}
-        </label>
-        <button type="submit">Create Account</button>
-      </fieldset>
-    </FormStyles>
-  );
-};
-
-export default Form;

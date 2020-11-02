@@ -1,6 +1,6 @@
 import App from 'next/app';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloProvider as OldApolloProvider } from '@apollo/client';
+// import { ApolloProvider } from '@apollo/client';
 import Page from '../components/Page';
 import withData from '../lib/ApolloClient';
 import { AuthProvider } from '../src/auth-context';
@@ -14,15 +14,15 @@ class MyApp extends App {
     const mergedProps = { ...pageProps, router };
 
     return (
-      <AuthProvider>
         <ApolloProvider client={apollo}>
-          <CartProvider>
-            <Page>
-              <Component {...mergedProps} />
-            </Page>
-          </CartProvider>
+            <AuthProvider>
+                <CartProvider>
+                    <Page>
+                        <Component {...mergedProps} />
+                    </Page>
+                </CartProvider>
+            </AuthProvider>
         </ApolloProvider>
-      </AuthProvider>
     );
   }
 }
