@@ -3,11 +3,8 @@ import styled from 'styled-components';
 import slug from 'slug';
 import Router from 'next/router';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
 import formatMoney from '../utils/formatMoney';
-import Loading from './Loading';
 import AddToCartButton from './AddToCartButton';
-import Pagination from './Pagination';
 
 export const productsQuery = gql`
   query PRODUCTS($searchTerm: String, $isProductSearch: Boolean) {
@@ -23,21 +20,22 @@ export const productsQuery = gql`
 `;
 
 const ProductsContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  padding: 1rem;
-  overflow: hidden;
-  grid-gap: 1rem;
-  object-fit: cover;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    grid-gap: 1rem;
+    object-fit: cover;
 
-  .product_image {
-    background-size: contain;
-    background-repeat: no-repeat;
-    width: 120px;
-    height: 120px;
-    background-position: 50% 50%;
-  }
+    .product_image {
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 120px;
+        height: 120px;
+        background-position: 50% 50%;
+    }
 `;
 
 const ProductCard = styled.div`

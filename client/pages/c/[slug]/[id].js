@@ -5,12 +5,7 @@ const CategoryPage = ({ router }) => {
   const categoryId = parseInt(router.query.id);
   const page = parseInt(router.query.page);
 
-  return (
-    <CategoryProducts
-      categoryId={categoryId}
-      page={page || 1}
-      displayAllItems
-    />
+  return (<div>Hello</div>
   );
 };
 

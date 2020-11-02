@@ -7,40 +7,51 @@ const getCategories = async () => {
 };
 
 const getProductsForCategory = async ({ categoryId, limit, skip }) => {
-  const result = await db.productCategory.findAndCountAll({
-    where: {
-      category_id: categoryId,
-    },
-    attributes: {
-      exclude: ['createdAt', 'updatedAt'],
-    },
-    include: [
-      {
-        model: db.product,
-      },
-      {
-        model: db.category,
-      },
-    ],
-    limit,
-    offset: skip,
-    // order: [
-    //     ['createdAt', 'DESC']
-    // ]
-  });
 
-  console.log('result for pagination: ', result);
+  console.log('categoryId: ', categoryId);
+  try {
+      const result = await db.productCategory.findAndCountAll({
+        where: {
+          category_id: categoryId,
+        },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+        include: [
+          {
+            model: db.product,
+          },
+          {
+            model: db.category,
+          },
+        ],
+        limit,
+        offset: skip,
+        // order: [
+        //     ['createdAt', 'DESC']
+        // ]
+      });
 
-  const categoryProducts = result.rows.map((productCategory) => ({
-    ...productCategory.product.dataValues,
-  }));
+      console.log('result: ', result);
 
-  return {
-    count: result.count,
-    categoryName: result.rows[0].category.name,
-    categoryId,
-    products: [...categoryProducts],
-  };
+
+      const categoryProducts = result.rows.map((productCategory) => ({
+        ...productCategory.product.dataValues,
+      }));
+
+      if(!categoryProducts.length) return [];
+
+      console.log('categoryProducts: ', categoryProducts);
+
+      return {
+        count: result.count,
+        categoryName: result.rows[0].category.name,
+        categoryId,
+        products: [...categoryProducts],
+      };
+  } catch(e) {
+    throw e;
+  }
 };
 
 module.exports = {

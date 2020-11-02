@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import slug from 'slug';
 import { perPage } from '../config';
+import Router from 'next/router';
 
 const PRODUCTS_AGGREGATE_QUERY = gql`
   query PRODUCTS_AGGREGATE_QUERY {
@@ -34,27 +35,36 @@ const Pagination = ({
 
   const totalPages = Math.ceil(totalItems / parseInt(1));
 
-  return (
-    <PaginationStyles>
-      <Link href={`/c/${slug(categoryName)}/${categoryId}?page=${page - 1}`}>
-        <a disabled={page === 1}>Previous</a>
-      </Link>
-      <p>
-        Page
-        {' '}
-        {page}
-        {' '}
-        of
-        {' '}
-        {totalPages}
-      </p>
-      <Link
-        href={`/c/${slug(categoryName)}/${categoryId}?page=${page + 1}`}
-        disabled={page === totalPages}
-      >
-        <a aria-disabled={page === totalPages}>Next</a>
-      </Link>
-    </PaginationStyles>
+  console.log('totalPages: ', totalPages);
+  console.log('page: ', page)
+
+  if(page <= 0) {
+    Router.push(`/c/${slug(categoryName)}/${categoryId}?page=${page - 1}`);
+  }
+
+  return page > 0 && (
+      <PaginationStyles>
+          <Link
+          disabled={page === 1}
+              href={`/c/${slug(categoryName)}/${categoryId}?page=${page - 1}`}
+          >
+              <a disabled={page === 1}>Previous</a>
+          </Link>
+          <p>
+              Page {page} of {totalPages}
+          </p>
+          <Link
+              href={`/c/${slug(categoryName)}/${categoryId}?page=${page + 1}`}
+              disabled={page === totalPages}
+          >
+              <a
+                  aria-disabled={page === totalPages}
+                  disabled={page === totalPages}
+              >
+                  Next
+              </a>
+          </Link>
+      </PaginationStyles>
   );
 };
 

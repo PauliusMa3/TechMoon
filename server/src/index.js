@@ -114,10 +114,14 @@ const start = () => {
         if (err) {
           return next(err);
         }
-
-        console.log('will Login: ', user);
-        // return res.redirect("/");
-        return res.json({ success: true });
+        return res.json({
+          success: true,
+          user: {
+            name: user.name,
+            email: user.email,
+            user: user.id,
+          },
+        });
       });
     })(req, res, next);
   });
