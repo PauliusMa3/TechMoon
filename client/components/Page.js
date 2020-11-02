@@ -22,6 +22,7 @@ const theme = {
         yellow: '#ffbf00',
         errorRed: '#d04f72',
         errorRed2: '#c54a51',
+        lightred: '#ffcccb',
         green: '#89c038',
         successGreen: '#4BB543'
     },

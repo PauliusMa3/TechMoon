@@ -23,6 +23,7 @@ export const FormStyles = styled.form`
   fieldset {
     border: none;
     display: flex;
+    flex-direction: column;
   }
 
   label {

@@ -13,6 +13,13 @@ function AuthProvider({ children }) {
     user: null,
   });
 
+  const cleanAuthError = () => {
+    setState({
+      ...state,
+      error: null
+    })
+  }
+
   const getUser = () => axios.get('http://localhost:8888/auth/userDetails', {
     withCredentials: true,
   });
@@ -88,7 +95,7 @@ function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider value={{ ...state, login, logout, cleanAuthError }}>
       {children}
     </AuthContext.Provider>
   );

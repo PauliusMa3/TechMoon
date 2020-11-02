@@ -79,33 +79,33 @@ const CheckoutMultiForm = () =>  {
                     return (
                         <Formik
                             initialValues={{
-                                name: 'Paulius',
-                                lastName: 'James',
-                                email: 'Paulius@gmail.com',
-                                phone: '868430653',
+                                name: '',
+                                lastName: '',
+                                email: '',
+                                phone: '',
                                 address: '',
                                 zip: '',
                                 radioOption: 'store-pickup',
-                                nameOnCard: 'Paulius james'
+                                nameOnCard: ''
                             }}
-                            // validationSchema={Yup.object({
-                            //     name: Yup.string().required(
-                            //         'Name field is required'
-                            //     ),
-                            //     lastName: Yup.string().required(
-                            //         'Last Name field is required'
-                            //     ),
-                            //     email: Yup.string()
-                            //         .email('Email is invalid')
-                            //         .required('Email field is required'),
+                            validationSchema={Yup.object({
+                                name: Yup.string().required(
+                                    'Name field is required'
+                                ),
+                                lastName: Yup.string().required(
+                                    'Last Name field is required'
+                                ),
+                                email: Yup.string()
+                                    .email('Email is invalid')
+                                    .required('Email field is required'),
                             //     // zip: Yup.string()
                             //         // .required('Zip code field is required')
                             //         // .matches(/^[0-9]+$/, 'Must be only digits'),
                             //     phone: Yup.string().required(
                             //         'Phone field is required'
                             //     ),
-                            //     nameOnCard: Yup.string().required('Name on the Card Required')
-                            // })}
+                                nameOnCard: Yup.string().required('Name on the Card Required')
+                            })}
                             onSubmit={(values, actions) => {
                                 console.log('onSubmit handler call');
                                 handleSubmit(
