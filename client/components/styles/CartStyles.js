@@ -74,6 +74,7 @@ export const CartContainer = styled.div`
   grid-template-rows: auto 1fr auto;
   position: fixed;
   max-width: 500px;
+  width: 100%;
   max-height: calc(100vh - 110px);
   right: 0;
   top: 110px;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import Router from 'next/router';
@@ -8,13 +8,13 @@ import CartItem from './CartItem';
 import { Button, TotalPrice, CartContainer } from './styles/CartStyles';
 import { useCartState, useCartDispatch } from '../src/cart-context';
 import formatMoney from '../utils/formatMoney';
+import useClickOutside from './useClickOutside';
 
 export const LOCAL_CART_QUERY = gql`
-  query {
-    cartOpen @client
-  }
+    query {
+        cartOpen @client
+    }
 `;
-
 export const CART_QUERY = gql`
   query CART_QUERY {
     cart {
@@ -37,18 +37,37 @@ const Cart = () => {
   const { data } = useQuery(LOCAL_CART_QUERY);
   const { cart, isLoading, error } = useCartState();
   const { fetchCart } = useCartDispatch();
-  const [closeCart] = useMutation(TOGGLE_CART_MUTATION);
-  if (isLoading) return <Loading />;
+  const [toggleCart] = useMutation(TOGGLE_CART_MUTATION);
+
+  const closeShoppingCart = useCallback(
+    () => {
+      if(data.cartOpen) {
+        toggleCart({
+            variables: {
+                cartEnabled: false
+            }
+        });
+      }
+    },
+    [data.cartOpen],
+  )
+  
+  const cartRef = useClickOutside(closeShoppingCart);
 
   const totalCost = cart
-    ? cart.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
-    : 0;
+      ? cart.cartItems.reduce(
+            (acc, item) => acc + item.price * item.quantity,
+            0
+        )
+      : 0;
+
+  if (isLoading) return <Loading />;
 
   return (
-      <CartContainer isOpen={data.cartOpen}>
+      <CartContainer isOpen={data.cartOpen} ref={cartRef}>
           <header>
               <h3>Your Shopping Cart</h3>
-              <strong onClick={closeCart}> &#10540;</strong>
+              <strong onClick={closeShoppingCart}> &#10540;</strong>
           </header>
           <ul>
               {cart &&
@@ -63,7 +82,7 @@ const Cart = () => {
           <footer>
               <Button
                   onClick={() => {
-                      closeCart();
+                      toggleCart();
                       Router.push({
                           pathname: '/cart'
                       });

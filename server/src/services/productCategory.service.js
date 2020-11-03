@@ -7,8 +7,6 @@ const getCategories = async () => {
 };
 
 const getProductsForCategory = async ({ categoryId, limit, skip }) => {
-
-  console.log('categoryId: ', categoryId);
   try {
       const result = await db.productCategory.findAndCountAll({
         where: {
@@ -32,7 +30,6 @@ const getProductsForCategory = async ({ categoryId, limit, skip }) => {
         // ]
       });
 
-      console.log('result: ', result);
 
 
       const categoryProducts = result.rows.map((productCategory) => ({
@@ -40,8 +37,6 @@ const getProductsForCategory = async ({ categoryId, limit, skip }) => {
       }));
 
       if(!categoryProducts.length) return [];
-
-      console.log('categoryProducts: ', categoryProducts);
 
       return {
         count: result.count,

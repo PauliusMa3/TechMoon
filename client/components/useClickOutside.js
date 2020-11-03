@@ -16,7 +16,7 @@ const useClickOutside = (close) => {
     };
   });
 
-  // return dropdownRef;
+  return dropdownRef;
 };
 
 export default useClickOutside;

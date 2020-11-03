@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { NavLink, LinkTitle } from './styles/NavStyles';
@@ -9,7 +9,12 @@ const Dropdown = ({ title, items }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const toggleOpen = () => setOpen(!open);
+  const toggleOpen = useCallback(
+    () => {
+      setOpen(false);
+    },
+    [],
+  )
 
   const onItemClick = (item) => {
     if (item.pathname) {
@@ -23,25 +28,37 @@ const Dropdown = ({ title, items }) => {
   const dropdownRef = useClickOutside(toggleOpen);
 
   return (
-    <DropdownStyles>
-      <div role="button" onKeyPress={toggleOpen} onClick={toggleOpen}>
-        <NavLink>
-          <LinkTitle>{title}</LinkTitle>
-        </NavLink>
-        {open && (
-          <DropdownListWrapper ref={dropdownRef}>
-            <ul>
-              {items.map((item) => (
-                <li onClick={() => onItemClick(item)}>
-                  {item.title}
-                  <Icon icon={item.icon} />
-                </li>
-              ))}
-            </ul>
-          </DropdownListWrapper>
-        )}
-      </div>
-    </DropdownStyles>
+      <DropdownStyles className="dropdown_wrapper">
+          <div
+              onClick={() => {
+                  if (open) {
+                      return;
+                  }
+                  setOpen(true);
+              }}
+
+              role='button'
+          >
+              <NavLink className="title" ref={dropdownRef}>
+                  <LinkTitle>{title}</LinkTitle>
+              </NavLink>
+              {open && (
+                  <DropdownListWrapper>
+                      <ul>
+                          {items.map((item) => (
+                              <li
+                                  key={item.id}
+                                  onClick={() => onItemClick(item)}
+                              >
+                                  {item.title}
+                                  <Icon icon={item.icon} />
+                              </li>
+                          ))}
+                      </ul>
+                  </DropdownListWrapper>
+              )}
+          </div>
+      </DropdownStyles>
   );
 };
 
