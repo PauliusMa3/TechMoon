@@ -4,7 +4,7 @@ const { session } = require('passport');
 const db = require('../../models');
 
 const identifiedParam = ({ sessionId, userId }) => {
-  if (userId && !sessionId) {
+  if (userId) {
     return { column: 'user_id', value: userId };
   }
 
@@ -16,10 +16,7 @@ const identifiedParam = ({ sessionId, userId }) => {
 };
 
 const fetchCart = async ({ req }) => {
-  console.log('fetchCart req.session: ', req.session);
-
   const userId = req.user ? req.user.id : null;
-  console.log('userId: ', userId);
 
   const sessionId = req.session.cartSessionId
     ? req.session.cartSessionId
@@ -30,7 +27,6 @@ const fetchCart = async ({ req }) => {
   if (!requiredParam) return;
 
   const { column, value } = requiredParam;
-
   const shoppingCart = await db.cart.findOne({
     where: {
       [`${column}`]: value,
@@ -47,7 +43,6 @@ const fetchCart = async ({ req }) => {
 
   const { userId: dbUserId, sessionId: dbSessionId } = shoppingCart.dataValues;
   if (userId && dbSessionId) {
-    console.log('will get rid of user Cart');
     await db.cart.destroy({
       where: {
         user_id: userId,
@@ -88,10 +83,7 @@ const fetchCart = async ({ req }) => {
   };
 };
 
-const addToCart = async ({
-  productId, decreaseQuantity, sessionId, req,
-}) => {
-  console.log('adding to cart');
+const addToCart = async ({ productId, decreaseQuantity, sessionId, req }) => {
   const userId = req.user ? req.user.id : null;
   const existingCart = await db.cart.findOne({
     where: {
@@ -109,8 +101,6 @@ const addToCart = async ({
       ],
     },
   });
-
-  console.log('existing cart ', existingCart);
 
   if (existingCart) {
     const existingItemInTheCart = await db.cartItem.findOne({
@@ -151,13 +141,23 @@ const addToCart = async ({
   const cartSessionId = v4();
 
   const newCartId = v4();
-  await db.cart.create({
+
+  const params = {
     id: newCartId,
     user_id: userId,
     session_id: cartSessionId,
+  };
+
+  if(userId) {
+    delete params.session_id
+  }
+  await db.cart.create({
+    ...params
   });
 
-  req.session.cartSessionId = cartSessionId;
+  if(!userId) {
+      req.session.cartSessionId = cartSessionId;
+  }
 
   await db.cartItem.create({
     id: v4(),
@@ -184,29 +184,34 @@ const deleteCart = async ({ cartId }) => {
 };
 
 const removeFromCart = async ({ cartId, cartItemId }) => {
-  const cartItemsCount = await db.cartItem.count({
-    where: {
-      cart_id: cartId,
-    },
-  });
+  try {
+      const cartItemsCount = await db.cartItem.count({
+        where: {
+          cart_id: cartId,
+        },
+      });
 
-  if (cartItemsCount === 1) {
-    await db.cart.destroy({
-      where: {
-        id: cartId,
-      },
-    });
-    return;
+      if (cartItemsCount === 1) {
+        await db.cart.destroy({
+          where: {
+            id: cartId,
+          },
+        });
+        return;
+      }
+
+      await db.cartItem.destroy({
+        where: {
+          id: cartItemId,
+        },
+      });
+      return {
+        message: 'Product was successfully removed from the cart',
+      };
+  } catch(e) {
+    throw e;
   }
 
-  await db.cartItem.destroy({
-    where: {
-      id: cartItemId,
-    },
-  });
-  return {
-    message: 'Product was successfully removed from the cart',
-  };
 };
 
 module.exports = {

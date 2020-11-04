@@ -35,8 +35,7 @@ export const CART_QUERY = gql`
 
 const Cart = () => {
   const { data } = useQuery(LOCAL_CART_QUERY);
-  const { cart, isLoading, error } = useCartState();
-  const { fetchCart } = useCartDispatch();
+  const { cart, isLoading, error, numberOfCartItems, totalCost } = useCartState();
   const [toggleCart] = useMutation(TOGGLE_CART_MUTATION);
 
   const closeShoppingCart = useCallback(
@@ -51,15 +50,10 @@ const Cart = () => {
     },
     [],
   )
+
+  console.log('CARTID: ',cart.id)
   
   const cartRef = useClickOutside(closeShoppingCart);
-
-  const totalCost = cart
-      ? cart.cartItems.reduce(
-            (acc, item) => acc + item.price * item.quantity,
-            0
-        )
-      : 0;
 
   if (isLoading) return <Loading />;
 
@@ -67,7 +61,13 @@ const Cart = () => {
       <CartContainer isOpen={data.cartOpen} ref={cartRef}>
           <header>
               <h3>Your Shopping Cart</h3>
-              <strong onClick={closeShoppingCart}> &#10540;</strong>
+              <strong onClick={() => {
+                toggleCart({
+                variables: {
+                    cartEnabled: false
+                }
+                    });
+              }}> &#10540;</strong>
           </header>
           <ul>
               {cart &&
@@ -88,7 +88,7 @@ const Cart = () => {
                       });
                   }}
               >
-                  {`View Your Bag ${cart ? cart.cartItems.length : ''}`}
+                  {`View Your Bag ${numberOfCartItems > 0 ? `(${numberOfCartItems})` : ''}`}
               </Button>
               <Button
                   primary
@@ -99,7 +99,7 @@ const Cart = () => {
               >
                   <span>Checkout</span>
                   <TotalPrice>
-                      {totalCost > 0 && formatMoney(totalCost)}
+                      {formatMoney(totalCost)}
                   </TotalPrice>
               </Button>
           </footer>

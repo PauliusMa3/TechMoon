@@ -50,7 +50,7 @@ function AuthProvider({ children }) {
     user: null,
   });
 
-  const cleanAuthError = () => {
+  const cleanAuthErrorFunc = () => {
     setState({
       ...state,
       error: null
@@ -71,7 +71,7 @@ function AuthProvider({ children }) {
       });
   }, []);
 
-  const login = async ({ email, password }) => {
+  const loginFunc = async ({ email, password }) => {
     try {
         setState({ status: 'pending', user: null, error: null });
         const res = await axios.post(
@@ -105,7 +105,7 @@ function AuthProvider({ children }) {
     }
   }
 
-  const register = ({email,name, password}) => {
+  const registerFunc = ({email,name, password}) => {
     setState({ status: 'pending', user: null, error: null });
     signup({
         variables: {
@@ -116,7 +116,7 @@ function AuthProvider({ children }) {
     });
   }
 
-  const logout = async () => {
+  const logoutFunc = async () => {
     await axios.get('http://localhost:8888/logout', {
       withCredentials: true,
     });
@@ -125,9 +125,19 @@ function AuthProvider({ children }) {
     setState({ status: 'success', error: null, user: null });
   };
 
+    const value = React.useMemo(() => {
+        return {
+            ...state,
+            loginFunc,
+            logoutFunc,
+            cleanAuthErrorFunc,
+            registerFunc
+        };
+    }, [state.status, state.user, state.error]);
+
     return (
         <AuthContext.Provider
-            value={{ ...state, login, logout, cleanAuthError, register }}
+            value={value}
         >
             {children}
         </AuthContext.Provider>
@@ -147,8 +157,20 @@ const useAuth = () => {
     const isError = context.status === 'error';
     const isAuthenticated = context.user && isSuccess;
 
+    const {loginFunc, logoutFunc, registerFunc, cleanAuthErrorFunc, user, error} = context
+
+    const login = React.useCallback(({...params}) => loginFunc({...params}), []);
+    const logout = React.useCallback(() => logoutFunc(), []);
+    const register = React.useCallback(({...params}) => registerFunc({...params}), []);
+    const cleanAuthError = React.useCallback(() => cleanAuthErrorFunc(), []);
+
     return {
-        ...context,
+        user,
+        error,
+        login,
+        logout,
+        register,
+        cleanAuthError,
         isSuccess,
         isLoading,
         isError,

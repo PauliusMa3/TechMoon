@@ -28,7 +28,7 @@ const Dropdown = ({ title, items }) => {
   const dropdownRef = useClickOutside(closeDropdown);
 
   return (
-      <DropdownStyles className="dropdown_wrapper">
+      <DropdownStyles className="dropdown_wrapper" ref={dropdownRef}>
           <div
               onClick={() => {
                   if (open) {
@@ -38,7 +38,7 @@ const Dropdown = ({ title, items }) => {
               }}
               role="button"
           >
-              <NavLink className="title" ref={dropdownRef}>
+              <NavLink className="title" >
                   <LinkTitle>{title}</LinkTitle>
               </NavLink>
               {open && <DropdownListWrapper>

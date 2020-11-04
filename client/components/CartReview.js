@@ -95,18 +95,11 @@ const ProductActions = styled.div`
 
 const cartReview = () => {
   const {
-    cart, numberOfCartItems, isLoading, error,
+    cart, isLoading, error,totalCost
   } = useCartState();
 
   if (isLoading) return (<Loading />);
   if (error) return <Error error={error} />;
-  const totalCost = cart
-    ? cart.cartItems.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0,
-    )
-    : 0;
-
   return (
     <CartReviewStyles>
       <ProductsInCart>
