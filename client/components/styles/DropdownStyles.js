@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 export const DropdownStyles = styled.div`
   position: relative;
@@ -24,11 +24,26 @@ export const DropdownStyles = styled.div`
   }
 `;
 
+const growDown = keyframes`{
+    0% {
+        transform: scaleY(0)
+    }
+    80% {
+        transform: scaleY(1.1)
+    }
+    100% {
+        transform: scaleY(1)
+    }
+}`
+
+
 export const DropdownListWrapper = styled.div`
+
   box-shadow: ${(props) => props.theme.boxShadow};
   position: absolute;
   top: 5rem;
   min-width: 300px;
   z-index: 500;
   background: ${(props) => props.theme.colors.white};
+  animation: 300ms ${growDown} ease-in-out;
 `;

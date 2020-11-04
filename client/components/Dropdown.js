@@ -9,7 +9,7 @@ const Dropdown = ({ title, items }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const toggleOpen = useCallback(
+  const closeDropdown = useCallback(
     () => {
       setOpen(false);
     },
@@ -25,7 +25,7 @@ const Dropdown = ({ title, items }) => {
     setOpen(false);
   };
 
-  const dropdownRef = useClickOutside(toggleOpen);
+  const dropdownRef = useClickOutside(closeDropdown);
 
   return (
       <DropdownStyles className="dropdown_wrapper">
@@ -36,14 +36,12 @@ const Dropdown = ({ title, items }) => {
                   }
                   setOpen(true);
               }}
-
-              role='button'
+              role="button"
           >
               <NavLink className="title" ref={dropdownRef}>
                   <LinkTitle>{title}</LinkTitle>
               </NavLink>
-              {open && (
-                  <DropdownListWrapper>
+              {open && <DropdownListWrapper>
                       <ul>
                           {items.map((item) => (
                               <li
@@ -55,8 +53,7 @@ const Dropdown = ({ title, items }) => {
                               </li>
                           ))}
                       </ul>
-                  </DropdownListWrapper>
-              )}
+                  </DropdownListWrapper>}
           </div>
       </DropdownStyles>
   );

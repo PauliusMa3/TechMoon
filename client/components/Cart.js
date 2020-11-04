@@ -49,7 +49,7 @@ const Cart = () => {
         });
       }
     },
-    [data.cartOpen],
+    [],
   )
   
   const cartRef = useClickOutside(closeShoppingCart);
