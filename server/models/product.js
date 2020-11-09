@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Product.associate = function (models) {
     Product.belongsTo(models.productCategory, { foreignKey: 'id' });
+    Product.hasMany(models.review, {
+      foreignKey: 'product_id',
+      onDelete: 'cascade',
+    });
   };
   return Product;
 };

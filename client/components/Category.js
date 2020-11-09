@@ -21,6 +21,8 @@ export const CATEGORY_PRODUCTS = gql`
                 description
                 sku
                 image
+                reviewsCount
+                averageRating
             }
         }
     }
@@ -69,7 +71,7 @@ const Category = ({ category }) => {
           </Link>
           {error && <ErrorBanner error={'Failed to fetch category products'} />}
           {loading && <Loading />}
-          {data?.categoryProducts?.products ?<Products products={data?.categoryProducts?.products} /> : <p>No products found for this category</p>}
+          {!error && data?.categoryProducts?.products ?<Products products={data?.categoryProducts?.products} /> : <p>No products found for this category</p>}
           
       </CategoryStyles>
   );

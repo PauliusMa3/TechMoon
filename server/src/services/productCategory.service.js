@@ -1,3 +1,4 @@
+const { Sequelize } = require('sequelize');
 const db = require('../../models');
 
 const getCategories = async () => {
@@ -18,6 +19,20 @@ const getProductsForCategory = async ({ categoryId, limit, skip }) => {
         include: [
           {
             model: db.product,
+            attributes: {
+              include: [
+                [
+                  Sequelize.literal(`(SELECT CAST(COUNT(*) as Int) FROM reviews WHERE reviews.product_id = product.id
+                )`),
+                  'reviewsCount',
+                ],
+                [
+                  Sequelize.literal(`(SELECT ROUND(AVG(reviews.rating),1) FROM reviews WHERE reviews.product_id = product.id
+                )`),
+                  'averageRating',
+                ],
+              ],
+            },
           },
           {
             model: db.category,
@@ -29,8 +44,6 @@ const getProductsForCategory = async ({ categoryId, limit, skip }) => {
         //     ['createdAt', 'DESC']
         // ]
       });
-
-
 
       const categoryProducts = result.rows.map((productCategory) => ({
         ...productCategory.product.dataValues,

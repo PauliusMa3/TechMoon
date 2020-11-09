@@ -50,9 +50,6 @@ const Cart = () => {
     },
     [],
   )
-
-  console.log('CARTID: ',cart.id)
-  
   const cartRef = useClickOutside(closeShoppingCart);
 
   if (isLoading) return <Loading />;
