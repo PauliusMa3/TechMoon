@@ -62,6 +62,7 @@ function AuthProvider({ children }) {
   });
 
   useEffect(() => {
+    setState({...state, status: 'pending'})
     getUser()
       .then((res) => {
         setState({ status: 'success', error: null, user: res.data.user });
@@ -76,7 +77,7 @@ function AuthProvider({ children }) {
         setState({ status: 'pending', user: null, error: null });
         const res = await axios.post(
             'http://localhost:8888/login',
-            { email, password },
+            { email: email.toLowerCase(), password },
             {
                 withCredentials: true
             }
@@ -117,12 +118,18 @@ function AuthProvider({ children }) {
   }
 
   const logoutFunc = async () => {
-    await axios.get('http://localhost:8888/logout', {
-      withCredentials: true,
-    });
+    try {
+      await axios.get('http://localhost:8888/logout', {
+        withCredentials: true,
+      });
 
-    Cookies.remove('connect.sid');
-    setState({ status: 'success', error: null, user: null });
+      Cookies.remove('connect.sid');
+      setState({ status: 'success', error: null, user: null });
+      Router.push('/');
+    } catch(e) {
+      console.log(e.message);
+    }
+
   };
 
     const value = React.useMemo(() => {

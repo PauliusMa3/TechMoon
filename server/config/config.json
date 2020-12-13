@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "Progr@m3r",
-    "database": "postgres",
+    "database": "techmoon",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },

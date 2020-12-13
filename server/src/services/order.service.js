@@ -54,6 +54,35 @@ const createOrder = async ({ req }) => {
   }
 };
 
+const getOrders = async ({
+  userId = '6e7cc051-63a0-47b8-a50f-ba03bf9649e9',
+  offset = 0,
+  limit = 10,
+}) => {
+  try {
+    const orderItems = await db.order.findAll({
+      where: {
+        user_id: userId,
+      },
+      include: {
+        model: db.orderItem,
+        as: 'orderItems',
+        include: {
+          model: db.product,
+          attributes: ['id', 'name', 'price', 'image'],
+        },
+      },
+      offset,
+      limit,
+    })
+
+    return orderItems;
+  } catch (e) {
+    console.error('Failed to fetch user Orders');
+  }
+};
+
 module.exports = {
   createOrder,
+  getOrders
 };

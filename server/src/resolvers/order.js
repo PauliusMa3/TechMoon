@@ -1,3 +1,4 @@
+const db = require('../../models');
 const { orderService, cartService } = require('../services');
 const { requiresLogin } = require('./utils');
 
@@ -8,12 +9,11 @@ const OrderMutations = {
     return {
       clientSecret: paymentSecret.clientSecret,
     };
-  }
-
+  },
 };
 
 const OrderQueries = {
-
+  orders: requiresLogin((parent, args, { req }, info) => orderService.getOrders({ userId: req.user.id, ...args }))
 };
 
 module.exports = {

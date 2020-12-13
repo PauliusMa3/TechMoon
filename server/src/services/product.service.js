@@ -1,37 +1,38 @@
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 const db = require('../../models');
 
 const getProduct = async ({ id }) => {
-  const product = await db.product.findByPk(id);
-
-  const reviewsCount = await db.review.count({
-    where: {
-      product_id: product.id,
-    },
-  });
-  return {
-    ...product.dataValues,
-    reviewsCount,
-  };
+  try {
+      const product = await db.product.findOne({
+        where: {
+          id: id,
+        },
+        attributes: {
+          include: [
+            [
+              Sequelize.literal(`(SELECT CAST(COUNT(*) as Int) FROM reviews WHERE reviews.product_id = product.id
+                )`),
+              'reviewsCount',
+            ],
+            [
+              Sequelize.literal(`(SELECT ROUND(AVG(reviews.rating),1) FROM reviews WHERE reviews.product_id = product.id
+                )`),
+              'averageRating',
+            ],
+          ],
+        },
+      });
+      return {
+        ...product.dataValues
+      }
+  } catch(e) {
+    throw new Error('Failed to fetch product data');
+  }
 };
 
 const getProducts = async ({
   searchTerm, isProductSearch, skip, limit,
 }) => {
-  // if(!searchTerm && !isProductSearch) {
-  //     // add limit & offset for pagination
-  //     const products = await db.product.findAndCountAll({
-  //         limit,
-  //         offset: skip,
-  //         order: [
-  //             ['createdAt', 'DESC']
-  //         ]
-  //     });
-  //     return {
-  //         count: products.count,
-  //         rows: products.rows
-  //     }
-  // }
 
   if (searchTerm && isProductSearch) {
     const searchProducts = await db.product.findAll({

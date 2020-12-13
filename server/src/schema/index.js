@@ -13,10 +13,26 @@ const typeDefs = gql`
     cart: Cart
     categories(limit: Int): [Category]
     categoryProducts(categoryId: Int, limit: Int, skip: Int): CategoryProducts
+    orders(limit: Int, offset: Int): [Order]
   }
 
   type PaymentResult {
     clientSecret: String
+  }
+
+  type OrderItem {
+    id: String
+    productId: String
+    orderId: String
+    quantity: Int
+    product: Product
+  }
+
+  type Order {
+    id: String
+    amount: Int
+    createdAt: String
+    orderItems : [OrderItem]
   }
 
   type CategoryProducts {
@@ -68,6 +84,7 @@ const typeDefs = gql`
     removeFromCart(cartId: String!, cartItemId: String!): SuccessMessage
     createOrder: PaymentResult
     deleteCart(cartId: String!): SuccessMessage
+    changePassword(currentPassword: String!, newPassword: String!): SuccessMessage
   }
 
   type ProductResult {
@@ -76,12 +93,13 @@ const typeDefs = gql`
   }
 
   type Product {
-    id: ID!
+    id: ID
     name: String
     sku: String
     description: String
     price: Int
     reviewsCount: Int
+    averageRating: String
     image: String
   }
 
@@ -98,8 +116,6 @@ const typeDefs = gql`
     userId: ID
     name: String
     email: String
-    password: String
-    phone: String
   }
 `;
 

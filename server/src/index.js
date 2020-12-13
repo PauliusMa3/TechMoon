@@ -92,17 +92,8 @@ const start = () => {
 
   app.use(passport.session());
 
-  // app.post("/login", passport.authenticate("local"), function (req, res) {
-  //   res.json({ success: true });
-  // });
   app.post('/login', (req, res, next) => {
-    /* look at the 2nd parameter to the below call */
     passport.authenticate('local', (err, user, info) => {
-      // if (err) {
-      //   return next(err);
-      // }
-      console.log('err: ', err);
-      console.log('user: ', user);
       if (!user) {
         res
           .status(401)

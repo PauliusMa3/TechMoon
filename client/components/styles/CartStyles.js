@@ -75,9 +75,9 @@ export const CartContainer = styled.div`
   position: fixed;
   max-width: 500px;
   width: 100%;
-  max-height: calc(100vh - 110px);
+  max-height: calc(100vh - 10vh);
   right: 0;
-  top: 110px;
+  top: 10vh;
   bottom: 0;
   background: white;
   transform: ${(props) => (props.isOpen ? 'none' : 'translateX(100%)')};

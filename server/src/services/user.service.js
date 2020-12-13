@@ -11,29 +11,76 @@ const signup = async ({email: passedEmail, password, name, req, db}) => {
 
     const userId = v4();
 
+    let user;
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await db.user.create({
+      user = await db.user.create({
         id: userId,
         name: name,
         email,
         password: hashedPassword,
       });
+
+      req.login(user, (err) => {
+        if (err) { return err; }
+      });
+
+      return {
+        userId,
+        name: name,
+        email: email,
+      };
     } catch(e) {
       throw new Error("Failed to create user");
     }
+}
 
-    req.login(user, (err) => {
-      if (err) { return err; }
-    });
+const changePassword = async({ currentPassword, newPassword, req, db}) => {
+  // check user existing password
+  try {
+    const user = await db.user.findOne({
+      where: {
+        id: req.user.id
+      }
+    })
 
-    return {
-      userId,
-      name: name,
-      email: email,
-    };
+    if(!user) {
+      throw new Error('Failed to Find User');
+    }
+
+    const result = await bcrypt.compare(currentPassword, user.password);
+
+    if(!result) {
+      throw new Error("Your current password is incorrect");
+    }
+  } catch(e) {
+    throw new Error('Failed to verify the user');
   }
 
+  try {
+    const newHashedPasword = await bcrypt.hash(newPassword, 10);
+
+    console.log('req.user: ', req.user);
+
+    const updatedUser = await db.user.update({
+      password: newHashedPasword
+    }, {
+      where: {
+        id: req.user.id
+      }
+    })
+
+    return {
+      message: "Password was successfully changed!"
+    }
+
+  } catch(e) {
+    throw new Error("Failed to Update User password");
+  }
+
+}
+
   module.exports = {
-      signup
+      signup,
+      changePassword
   }
