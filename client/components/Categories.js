@@ -27,7 +27,7 @@ const Categories = () => {
   return (
     <CategoriesStyles>
       {
-        data.categories.map((category) => <Category key={category.id} category={category} />)
+        data?.categories.map((category) => <Category key={category.id} category={category} />)
       }
     </CategoriesStyles>
   );

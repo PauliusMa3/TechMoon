@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  FaCreditCard, FaSignOutAlt,
+  FaCreditCard, FaSignOutAlt, FaUser,
 } from 'react-icons/fa';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
@@ -39,8 +39,14 @@ const Nav = () => {
         {
             id: 1,
             title: 'Orders',
-            pathname: '/profile/orders',
+            pathname: '/orders',
             icon: FaCreditCard
+        },
+        {
+            id: 1,
+            title: 'Profile',
+            pathname: '/profile',
+            icon: FaUser
         },
         {
             id: 2,

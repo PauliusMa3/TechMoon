@@ -57,7 +57,7 @@ const Star = styled.div`
 const ReviewAverageStars = styled.div`
     display: flex;
 `;
-const Reviews = ({ productId, reviewsCount }) => {
+const Reviews = ({ productId, reviewsCount, averageRating }) => {
   const { isAuthenticated } = useAuth();
 
   const { data, loading, error } = useQuery(FETCH_REVIEWS_QUERY, {
@@ -66,38 +66,44 @@ const Reviews = ({ productId, reviewsCount }) => {
     },
   });
 
-  const numberOfFullStars = '★'.repeat(1).split('');
-  const numberOfEmptyStars = '☆'.repeat(4).split('');
+  const numberOfStars = Math.floor(parseFloat(averageRating));
+  const numberOfFullStars = '★'.repeat(numberOfStars).split('');
+  const numberOfEmptyStars = '☆'.repeat(5-numberOfStars).split('');
 
   return (
-    <ReviewContainer>
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          <ReviewStats>
-            <ReviewLabel>Reviews</ReviewLabel>
-            <strong>4.0</strong>
-            <ReviewAverageStars>
-              {numberOfFullStars.map((star) => (
-                <Star>{star}</Star>
-              ))}
-              {numberOfEmptyStars.map((star) => (
-                <Star>{star}</Star>
-              ))}
-            </ReviewAverageStars>
-            <p>
-              {`based on ${reviewsCount} review${
-                reviewsCount === 1 ? '' : 's'
-              }`}
-            </p>
-          </ReviewStats>
-          {isAuthenticated && <ReviewForm productId={productId} />}
-          {!loading &&
-              data && data.reviews.map((review) => <ReviewCard review={review} />)}
-        </>
-      )}
-    </ReviewContainer>
+      <ReviewContainer>
+          {loading ? (
+              <Loading />
+          ) : (
+              <>
+                  {reviewsCount && (
+                      <ReviewStats>
+                          <ReviewLabel>Reviews</ReviewLabel>
+                            <strong>{averageRating}</strong>
+                          <ReviewAverageStars>
+                              {numberOfFullStars.map((star) => (
+                                  <Star>{star}</Star>
+                              ))}
+                              {numberOfEmptyStars.map((star) => (
+                                  <Star>{star}</Star>
+                              ))}
+                          </ReviewAverageStars>
+                          <p>
+                              {`based on ${reviewsCount} review${
+                                  reviewsCount === 1 ? '' : 's'
+                              }`}
+                          </p>
+                      </ReviewStats>
+                  )}
+
+                  { <ReviewForm productId={productId} />}
+                  {
+                      data?.reviews.map((review) => (
+                        <ReviewCard key={review.id} review={review} />
+                  ))}
+              </>
+          )}
+      </ReviewContainer>
   );
 };
 

@@ -24,7 +24,9 @@ const theme = {
         errorRed2: '#c54a51',
         lightred: '#ffcccb',
         green: '#89c038',
-        successGreen: '#4BB543'
+        successGreen: '#4BB543',
+        labelGrey: '#909090',
+        valueBlack: '#5a5e6e'
     },
     maxWidth: '1300px',
     boxShadow: '0 6px 14px rgba(0,0,0,.1)'
@@ -94,6 +96,11 @@ const StyledPage = styled.div`
   box-sizing: border-box;
 `;
 
+const Content = styled.div`
+  min-height: 85vh;
+  height: 100%;
+`
+
 const Page = (props) => {
   const { fetchCart } = useCartDispatch();
   const router = useRouter();
@@ -105,7 +112,6 @@ const Page = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-
       <StyledPage>
         {router.pathname.includes('checkout') ? (
           <CustomPage>{props.children}</CustomPage>
@@ -113,7 +119,9 @@ const Page = (props) => {
           <Inner>
             <Cart />
             <Header />
-            {props.children}
+            <Content>
+             {props.children}
+            </Content>
             <Footer />
           </Inner>
         )}

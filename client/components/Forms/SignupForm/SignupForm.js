@@ -7,10 +7,10 @@
       UserIcon,
       LockIcon,
       LinkToSignup
-  } from './styles/FormStyles';
-  import { useAuth } from '../src/auth-context';
-  import InputField from './Form/InputField';
-  import ErrorBanner from '../components/ErrorBanner';
+  } from '../FormElements/FormStyles';
+  import { useAuth } from '../../../src/auth-context';
+  import InputField from '../FormElements/InputField';
+  import ErrorBanner from '../../ErrorBanner';
 
 
 

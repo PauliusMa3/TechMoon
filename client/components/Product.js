@@ -9,6 +9,7 @@ import Reviews from './Reviews';
 import Loading from './Loading';
 import formatMoney from '../utils/formatMoney';
 import {Tabs, Tab} from './Tabs/Tabs';
+import ErrorBanner from './ErrorBanner';
 
 const PRODUCT_QUERY = gql`
   query PRODUCT_QUERY($id: ID!) {
@@ -19,6 +20,7 @@ const PRODUCT_QUERY = gql`
       description 
       sku,
       reviewsCount,
+      averageRating,
       image
       }
   }
@@ -84,7 +86,7 @@ const Product = () => {
 
   if (loading) return (<Loading />);
 
-  if (!data) return null;
+  if(error) return <ErrorBanner error={error.message} />
 
   return (
       <ProductStyles>
@@ -102,13 +104,6 @@ const Product = () => {
                   </ProductSideBarBlock>
                   <ProductSideBarBlock>
                       <ProductPriceValue
-                          onClick={(productDescriptionRef) => {
-                              console.log(
-                                  'productDescriptionRef',
-                                  productDescriptionRef
-                              );
-                              scrollTo(productDescriptionRef);
-                          }}
                       >
                           {formatMoney(data.product.price)}
                       </ProductPriceValue>
@@ -120,14 +115,23 @@ const Product = () => {
           </ProductHeroStyles>
 
           <Tabs>
-              <Tab label='description' tabName={'description'}>
-                  <ProductDescription data={data.product.description} />
+              <Tab label="description" tabName={'description'}>
+                  <ProductDescription
+                      data={data.product.description}
+                  />
               </Tab>
               <Tab label={'specifications'} tabName={'specifications'}>
                   <ProductDescription data={data.product.description} />
               </Tab>
-              <Tab label={'reviews'} tabName={`reviews (${data && data.product.reviewsCount})`}>
-                  <Reviews />
+              <Tab
+                  label={'reviews'}
+                  tabName={`reviews (${data && data.product.reviewsCount})`}
+              >
+                  <Reviews
+                      averageRating={data?.product?.averageRating}
+                      reviewsCount={data?.product?.reviewsCount}
+                      productId={data?.product?.id}
+                  />
               </Tab>
           </Tabs>
       </ProductStyles>

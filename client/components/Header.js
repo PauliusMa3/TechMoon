@@ -9,7 +9,7 @@ import SearchItem from './SearchItem';
 
 const Container = styled.div`
   width: 100%;
-  height: 110px;
+  height: 10vh;
   border-bottom: 1px solid ${(props) => props.theme.colors.lightGrey};
   display: grid;
   grid-template-columns: repeat(3, auto);

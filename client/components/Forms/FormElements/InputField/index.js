@@ -5,7 +5,7 @@ import {
     Label,
     CustomInputFieldStyles,
     InputWithIcon
-} from './InputField.styles';
+} from './styles';
 
 
 

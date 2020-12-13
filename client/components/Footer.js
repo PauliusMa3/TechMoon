@@ -6,6 +6,7 @@ import Logo from './StoreName';
 const FooterContainer = styled.div`
   border-top: 1px solid ${(props) => props.theme.colors.lightGrey};
   overflow: hidden;
+  align-self: flex-end;
 `;
 
 const CopyrightSection = styled.div`
@@ -54,7 +55,7 @@ const Links = styled.div`
 
 const FooterLinks = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
   padding-top: 1.75rem;
   padding-bottom: 1.25rem;
   justify-items: center;
