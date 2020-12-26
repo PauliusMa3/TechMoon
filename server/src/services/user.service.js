@@ -1,5 +1,10 @@
 const { v4 } = require('uuid');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const util = require('util');
+const {transport, baseEmail} = require('./mail.service');
+const { Op } = require('sequelize/types');
+const db = require('../../models');
 
 const signup = async ({email: passedEmail, password, name, req, db}) => {
     const email = passedEmail.toLowerCase();
@@ -62,7 +67,7 @@ const changePassword = async({ currentPassword, newPassword, req, db}) => {
 
     console.log('req.user: ', req.user);
 
-    const updatedUser = await db.user.update({
+    await db.user.update({
       password: newHashedPasword
     }, {
       where: {
@@ -80,7 +85,101 @@ const changePassword = async({ currentPassword, newPassword, req, db}) => {
 
 }
 
+const passwordResetRequest = ({email, db}) => {
+
+  const user = db.user.findOne({
+    where: {
+      email: email.toLowerCase()
+    }
+  })
+
+  const returnMessage = "If an account with this email exists, you will receive an email with password reset instructions"
+
+  if(!user) {
+    return {
+      message: returnMessage
+    }
+  }
+
+  const randomBytes = util.promisify(crypto.randomBytes);
+
+  const passwordResetToken = (await randomBytes(32)).toString('hex');
+
+  await db.user.update({
+    password_reset_token: passwordResetToken,
+    password_reset_token_expiry: Date.now() + 3600000
+  },{where: {
+      id: user.id
+  }})
+
+  const emailHtml = `
+    Reset your Password
+    \n\n\n
+    <a href="${process.env.FRONTEND_URL}/passwordReset/resetToken?=${passwordResetToken}"></a>
+    \n\n
+    <p>If you have not requested password reset, please ignore this email</p>
+    `
+
+  const message = {
+    from: 'password-reset@techmoon.com',
+    to: user.email,
+    subject: 'Password Reset Request',
+    html: baseEmail(emailHtml)
+  }
+
+
+  await transport.sendMail({
+    ...message
+  })
+  
+  return {
+      message: returnMessage
+    }
+}
+
+const resetPassword = ({password, confirmPassword, resetToken, db,req}) => {
+
+  if(password != confirmPassword) {
+    throw new Error('Passwords should match!');
+  }
+
+  const user = await db.user.findOne({
+    where: {
+      [Op.and]: [
+        {
+          password_reset_token: resetToken,
+        },
+        {
+          password_reset_token_expiry: {
+            [Op.gte]: Date.now() - 3600000
+          },
+        },
+      ],
+  }});
+
+  if(!user) {
+    throw new Error("Token is either invalid or expired!");
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db.user.update({
+      password: hashedPassword,
+      password_reset_token: null,
+      password_reset_token_expiry: null
+    })
+
+    return {
+      message: 'Password was successfully changed'
+    }
+  } catch(e) {
+    throw new Error("Failed to update user'\s password");
+  }
+}
+
   module.exports = {
       signup,
-      changePassword
+      changePassword,
+      passwordResetRequest,
+      resetPassword
   }

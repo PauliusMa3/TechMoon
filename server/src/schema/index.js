@@ -85,6 +85,8 @@ const typeDefs = gql`
     createOrder: PaymentResult
     deleteCart(cartId: String!): SuccessMessage
     changePassword(currentPassword: String!, newPassword: String!): SuccessMessage
+    passwordResetRequest(email: !String!):SuccessMessage
+    resetPassword(password: String!, resetPassword: String!, resetToken: String!): SuccessMessage
   }
 
   type ProductResult {

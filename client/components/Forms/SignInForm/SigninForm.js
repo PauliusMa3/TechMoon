@@ -65,6 +65,12 @@ const SigninForm = () => {
                             <a>Create an account</a>
                         </Link>
                     </LinkToSignup>
+                    <LinkToSignup>
+                        <span>Forgot Password? </span>
+                        <Link href="/forgot-password">
+                            <a>Reset Your Password</a>
+                        </Link>
+                    </LinkToSignup>
                     <button type="submit">
                         {isLoading ? 'loading...' : 'login'}
                     </button>

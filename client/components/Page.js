@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import Header from './Header';
 import Footer from './Footer';
 import { useCartDispatch } from '../src/cart-context';
-import { useAuth } from '../src/auth-context';
 import Cart from './Cart';
 
 const theme = {
@@ -18,11 +17,13 @@ const theme = {
         primaryBlue: '#0993f3',
         secondaryBlue: '#00719c',
         specialBlue: '#00b4db',
+        trustyBlue: '#1665d8',
         red: '#d24d5f',
         yellow: '#ffbf00',
         errorRed: '#d04f72',
         errorRed2: '#c54a51',
         lightred: '#ffcccb',
+        lightgreen: '#a6f1a6',
         green: '#89c038',
         successGreen: '#4BB543',
         labelGrey: '#909090',
@@ -81,10 +82,11 @@ const Inner = styled.div`
 
 const CustomPage = styled.div`
   width: 100%;
-  font-size: 62.5%;
   height: 100%;
+  font-size: 62.5%;
   overflow: hidden;
   margin: 0 auto;
+  font-size: 62.5%;
 `;
 
 const StyledPage = styled.div`
@@ -101,6 +103,11 @@ const Content = styled.div`
   height: 100%;
 `
 
+const customPages = [
+  'checkout',
+  '/forgot-password',
+]
+
 const Page = (props) => {
   const { fetchCart } = useCartDispatch();
   const router = useRouter();
@@ -113,18 +120,20 @@ const Page = (props) => {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <StyledPage>
-        {router.pathname.includes('checkout') ? (
-          <CustomPage>{props.children}</CustomPage>
-        ) : (
+        {
+          customPages.includes(router.pathname) ? (
+            <CustomPage>{props.children}</CustomPage>
+          ) : (
           <Inner>
-            <Cart />
-            <Header />
-            <Content>
-             {props.children}
-            </Content>
-            <Footer />
+              <Cart />
+              <Header />
+              <Content>
+              {props.children}
+              </Content>
+              <Footer />
           </Inner>
-        )}
+          )
+        }
       </StyledPage>
     </ThemeProvider>
   );
