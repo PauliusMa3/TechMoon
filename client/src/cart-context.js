@@ -1,16 +1,9 @@
 import React, {
-  createContext,
   useContext,
   useState,
-  useReducer,
-  useEffect,
 } from 'react';
-import Cookies from 'js-cookie';
 import gql from 'graphql-tag';
-import { useQuery, useLazyQuery } from '@apollo/react-hooks';
-import { v4 as uuidv4 } from 'uuid';
-import AddToCartButton from '../components/AddToCartButton';
-import { number } from 'yup';
+import { useLazyQuery } from '@apollo/react-hooks';
 
 const CartStateContext = React.createContext();
 const CartDispatchContext = React.createContext();

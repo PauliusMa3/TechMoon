@@ -1,7 +1,6 @@
 import React from 'react';
 import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import { useCartDispatch } from '../../../src/cart-context';
 import InputField from '../FormElements/InputField';
 import ErrorBanner from '../../ErrorBanner/ErrorBanner';
 import { ForgotPasswordForm} from './styles';
@@ -23,7 +22,9 @@ const PASSWORD_RESET_REQUEST = gql`
 
 const ForogotPasswordForm = () => {
 
-  const [passwordResetRequest, {loading, called, error}] = useMutation(PASSWORD_RESET_REQUEST);
+  const [passwordResetRequest, {loading, called, error, data}] = useMutation(PASSWORD_RESET_REQUEST);
+
+  console.log('data; ', data);
 
   return (
     <Formik
@@ -37,6 +38,7 @@ const ForogotPasswordForm = () => {
         })}
         onSubmit={({email}) => {
 
+            console.log("email, vlaue: ", email);
             passwordResetRequest({
                 variables: {
                     email
@@ -46,8 +48,8 @@ const ForogotPasswordForm = () => {
     >
         <Form>
             <ForgotPasswordForm>
-                <ErrorBanner error={error.message} />
-                {!error && !loading && called && <SuccessMessage message={data.message} />}
+                {error && <ErrorBanner error={error.message} />}
+                {!error && !loading && called && <SuccessMessage message={data.passwordResetRequest.message} />}
                 <h2>Forgot Password</h2>
                 <p>Enter your email and we'll send you a link to reset your password</p>
                 <Image 
@@ -69,7 +71,7 @@ const ForogotPasswordForm = () => {
                         icon={() => <EnvelopeIcon />}
                     />
                     <button type="submit">
-                        {isLoading ? 'loading...' : 'Submit'}
+                        {loading ? 'Loading...' : 'Submit'}
                     </button>
                 </fieldset>
                 <Link href='/signin'>

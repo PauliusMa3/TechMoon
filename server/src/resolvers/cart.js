@@ -8,7 +8,6 @@ const CartQueries = {
 
 const CartMutations = {
   addToCart: (parent, args, { db, req }, info) => {
-    console.log('access here cart resolver');
     return cartService.addToCart({ ...args, req });
   },
   removeFromCart: requiresLogin((parent, args, ctx) => cartService.removeFromCart(args)),

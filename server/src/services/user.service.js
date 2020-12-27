@@ -3,8 +3,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const util = require('util');
 const {transport, baseEmail} = require('./mail.service');
-const { Op } = require('sequelize/types');
-const db = require('../../models');
+const { Op } = require('sequelize');
 
 const signup = async ({email: passedEmail, password, name, req, db}) => {
     const email = passedEmail.toLowerCase();
@@ -85,9 +84,9 @@ const changePassword = async({ currentPassword, newPassword, req, db}) => {
 
 }
 
-const passwordResetRequest = ({email, db}) => {
+const passwordResetRequest = async({email, db}) => {
 
-  const user = db.user.findOne({
+  const user = await db.user.findOne({
     where: {
       email: email.toLowerCase()
     }
@@ -103,7 +102,10 @@ const passwordResetRequest = ({email, db}) => {
 
   const randomBytes = util.promisify(crypto.randomBytes);
 
-  const passwordResetToken = (await randomBytes(32)).toString('hex');
+  const RandomisedToken = await randomBytes(32)
+
+  const passwordResetToken = RandomisedToken.toString('hex');
+
 
   await db.user.update({
     password_reset_token: passwordResetToken,
@@ -113,9 +115,19 @@ const passwordResetRequest = ({email, db}) => {
   }})
 
   const emailHtml = `
-    Reset your Password
+    You have recently requested to reset your password for your TechMoon account. Click the button below to reset
     \n\n\n
-    <a href="${process.env.FRONTEND_URL}/passwordReset/resetToken?=${passwordResetToken}"></a>
+    <a style="
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: white;
+    background: #1665d8;
+    display: block;
+    width: max-content;
+    margin: 20px auto;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;" href="${process.env.CLIENT_URL}/passwordReset?resetToken=${passwordResetToken}">Reset Password</a>
     \n\n
     <p>If you have not requested password reset, please ignore this email</p>
     `
@@ -137,7 +149,7 @@ const passwordResetRequest = ({email, db}) => {
     }
 }
 
-const resetPassword = ({password, confirmPassword, resetToken, db,req}) => {
+const resetPassword = async({password, confirmPassword, resetToken, db,req}) => {
 
   if(password != confirmPassword) {
     throw new Error('Passwords should match!');
@@ -167,6 +179,10 @@ const resetPassword = ({password, confirmPassword, resetToken, db,req}) => {
       password: hashedPassword,
       password_reset_token: null,
       password_reset_token_expiry: null
+    }, {
+      where: {
+        id: user.id
+      }
     })
 
     return {

@@ -71,7 +71,7 @@ const OrderDetails = styled.div`
 `;
 
 const OrdersPage = () => {
-    const {data, loading, error, fetchMore} = useQuery(GET_ORDERS, {
+    const {data, loading, error} = useQuery(GET_ORDERS, {
         variables: {
             limit: 10,
             offset: 0

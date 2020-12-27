@@ -1,7 +1,13 @@
 import styled from 'styled-components';
-import {FaEnvelope} from 'react-icons/fa'
+import InputField from '../FormElements/InputField';
 
-export const ForgotPasswordForm = styled.form`
+
+export const StyledInputField = styled(InputField)`
+    margin-top: 0.5rem;
+`
+
+
+export const PasswordResetFormStyles = styled.div`
     padding: 2rem;
     box-shadow: ${props => props.theme.boxShadow};
     max-width: 700px;
@@ -12,8 +18,8 @@ export const ForgotPasswordForm = styled.form`
     font-family: 'Robo-regular';
     background: ${props => props.theme.colors.white};
 
-    .forgot-password-image {
-        align-self: center;
+    .base_form {
+        width: 100%;
     }
 
     h2 {
@@ -24,12 +30,6 @@ export const ForgotPasswordForm = styled.form`
         font-size: 0.8rem;
         color: ${props => props.theme.colors.labelGrey};
     }
-
-    p {
-        font-size: 1rem;
-        color: ${props => props.theme.colors.labelGrey};
-    }
-
 
     fieldset {
         width: 100%;
@@ -50,6 +50,7 @@ export const ForgotPasswordForm = styled.form`
         background: ${props => props.theme.colors.successGreen};
         margin-top: 2rem;
         cursor: pointer;
+        font-size: 1.2rem;
 
         &:hover {
             opacity: 0.7;
@@ -68,7 +69,3 @@ export const ForgotPasswordForm = styled.form`
         }
     }
 `
-export const EnvelopeIcon = styled(FaEnvelope)`
-    fill: ${(props) => props.theme.colors.secondaryGrey};
-    margin: 0.5rem;
-`;

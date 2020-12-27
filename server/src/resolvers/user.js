@@ -1,5 +1,4 @@
 const {userService} = require('../services');
-const { passwordResetRequest } = require('../services/user.service');
 const {requiresLogin} = require('./utils');
 
 const UserMutations = {

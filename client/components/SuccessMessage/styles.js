@@ -22,6 +22,7 @@ export const SuccessMessageStyles = styled.div`
     p {
         margin: 0;
         padding: 0;
+            
     }
 
     transform: translateY(0%);

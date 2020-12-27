@@ -87,22 +87,7 @@ const AddToCartButton = ({ productId, product }) => {
       onClick={async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('what is inside product: ', product);
 
-        // const { image, name, price, id: productId, sku } = product;
-
-        // dispatch({
-        //   type: 'addToCart',
-        //   cartItem: {
-        //     image,
-        //     name,
-        //     price,
-        //     productId,
-        //     sku,
-        //   },
-        // });
-
-        console.log('productId: ', productId);
         await addToCart({
           variables: {
             productId: parseInt(productId),

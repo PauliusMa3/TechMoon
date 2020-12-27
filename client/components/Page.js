@@ -106,6 +106,7 @@ const Content = styled.div`
 const customPages = [
   'checkout',
   '/forgot-password',
+  '/passwordReset'
 ]
 
 const Page = (props) => {

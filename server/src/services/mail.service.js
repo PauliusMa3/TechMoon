@@ -5,20 +5,21 @@ const transport = nodemailer.createTransport({
     port:process.env.MAIL_PORT,
     auth: {
         user: process.env.MAIL_USER,
-        password: process.env.MAIL_PASSWORD,
+        pass: process.env.MAIL_PASSWORD,
     }
 })
 
 const baseEmail = text => `
   <div className="email" style="
-    border: 1px solid black;
-    padding: 20px;
+    border: 20px solid #0763e5;
+    text-align:center;
+    padding: 10px;
     font-family: sans-serif;
     line-height: 2;
     font-size: 20px;
   ">
-    <h2>Hello There!</h2>
-    <p>${text}</p>
+    <h2>Hello</h2>
+    <div>${text}</div>
     <p>© TechMoon</p>
   </div>
 `;

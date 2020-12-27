@@ -1,35 +1,33 @@
 import React from 'react';
 import {Formik, Form} from 'formik';
 import {LockIcon} from '../FormElements/FormStyles';
-import {ChangePasswordFormStyles, StyledInputField} from './styles';
+import { PasswordResetFormStyles, StyledInputField} from './styles';
 import * as Yup from 'yup';
 import {useMutation} from '@apollo/react-hooks';
 import {gql} from '@apollo/client';
 import ErrorBanner from '../../ErrorBanner';
+import { Router } from 'next/router';
 
-
-const CHANGE_PASSWORD_MUTATION = gql`
-    mutation CHANGE_PASSWORD_MUTATION($currentPassword: String!, $newPassword: String!) {
-        changePassword(currentPassword: $currentPassword, newPassword: $newPassword) {
+const RESET_PASSWORD = gql`
+    mutation RESET_PASSWORD($password: String!, $confirmPassword: String!, $resetToken: String!) {
+        resetPassword(password: $password, confirmPassword: $confirmPassword, resetToken: $resetToken) {
             message
         }
     }
 `
 
-const ChangePasswordForm = () => {
+const PasswordResetForm = ({resetToken}) => {
 
-  const [changePassword, { loading, error}] = useMutation(CHANGE_PASSWORD_MUTATION);
+  const [resetPassword, { loading, error}] = useMutation(RESET_PASSWORD);
+
    return (
-    <ChangePasswordFormStyles>
+
           <Formik
               initialValues={{
-                  confirmOldPassword: '',
                   newPassword: '',
                   confirmNewPassword: '',
               }}
               validationSchema={Yup.object({
-                  password: Yup.string()
-                      .required('Current password is required'),
                   newPassword: Yup.string()
                       .matches(
                           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
@@ -46,26 +44,27 @@ const ChangePasswordForm = () => {
                   )
               })}
               onSubmit={(values, actions) => {
-                changePassword({variables: {
-                    currentPassword: values.password,
-                    newPassword: values.newPassword
-                }});
+                resetPassword({
+                    variables: {
+                        password: values.newPassword,
+                        confirmPassword: values.confirmNewPassword,
+                        resetToken
+                    }
+                })
                 actions.resetForm();
+
+                if(!error) {
+                    Router.push('/');
+                }
               }}
           >
-              <Form>
-     
+
+                    <PasswordResetFormStyles>
+                
+                    <Form className='base_form'>
                       {error && <ErrorBanner error={error.message} />}
-                      <h2>Change Password</h2>
+                      <h2>Reset Your Password</h2>
                       <fieldset disabled={loading}>
-                          <StyledInputField
-                              type="password"
-                              label="Current Password"
-                              name="password"
-                              placeholder="Enter current your password"
-                              iconInputField
-                              icon={() => <LockIcon />}
-                          />
                           <StyledInputField
                               type="password"
                               label="New Password"
@@ -83,12 +82,14 @@ const ChangePasswordForm = () => {
                               icon={() => <LockIcon />}
                           />
                           <button type="submit">
-                              {'Change Password'}
+                              {loading ? "Loading..." : "Submit"}
                           </button>
                       </fieldset>
+         
               </Form>
+                           </PasswordResetFormStyles>
           </Formik>
-    </ChangePasswordFormStyles>)
+    )
 }
 
-export default ChangePasswordForm
+export default PasswordResetForm
